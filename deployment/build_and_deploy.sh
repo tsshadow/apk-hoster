@@ -1,8 +1,11 @@
 #!/bin/bash
 set -e
 
-# Change to the directory where the script is located
-cd "$(dirname "$0")"
+# Load configuration
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$SCRIPT_DIR/config.sh"
+
+cd "$SCRIPT_DIR"
 
 # Check for docker permissions
 if ! docker info >/dev/null 2>&1; then
@@ -15,27 +18,30 @@ if ! docker info >/dev/null 2>&1; then
     fi
 fi
 
-echo "--- Starting Build and Publish ---"
+echo "--- Starting Build and Deploy ---"
 
 # 0. Version Bump (if argument provided)
 if [ "$1" == "major" ] || [ "$1" == "minor" ] || [ "$1" == "patch" ]; then
-    source ./bump_version.sh "$1"
+    source "$SCRIPT_DIR/bump_version.sh" "$1"
     VERSION_NAME="v$NEW_VERSION"
 
-    cd ..
+    cd "$ROOT_DIR"
     git add .
     git commit -m "chore: release $VERSION_NAME"
     git tag -a "$VERSION_NAME" -m "Release $VERSION_NAME"
     git push origin main --tags || echo "Warning: git push failed, continuing..."
-    cd scripts
+    cd "$SCRIPT_DIR"
 else
-    VERSION_NAME="latest"
+    VERSION_NAME="${VERSION_NAME:-latest}"
 fi
 
-# Run build script (which also pushes the image)
+# Run build script
 VERSION_NAME=$VERSION_NAME ./build.sh
+
+# Run publish script
+VERSION_NAME=$VERSION_NAME ./publish.sh
 
 # Run deploy script
 ./deploy.sh
 
-echo "--- Build and Publish completed successfully ---"
+echo "--- Build and Deploy completed successfully ---"

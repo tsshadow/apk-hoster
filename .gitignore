@@ -1,4 +1,5 @@
 .env
+.deploy-env
 dist/
 *.db
 cookies.txt

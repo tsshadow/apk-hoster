@@ -1,11 +1,10 @@
 #!/bin/bash
 set -e
 
-# Configuration
-# Find the root directory (where .git usually is)
+# Load configuration
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-ROOT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
-VERSION_FILE="$ROOT_DIR/VERSION"
+source "$SCRIPT_DIR/config.sh"
+
 CHANGELOG_FILE="$ROOT_DIR/changelog.md"
 RELEASE_NOTES_FILE="$ROOT_DIR/RELEASE_NOTES.md"
 

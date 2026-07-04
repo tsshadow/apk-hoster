@@ -1,0 +1,20 @@
+# Deployment Configuration for APK Hoster
+# This file contains settings for building and deploying the Docker container.
+# Rename this file to .deploy-env and fill in your details.
+
+# Docker Registry Settings
+DOCKER_IMAGE=tsshadow/apk-hoster
+
+# Remote Host Settings (for deployment/deploy.sh)
+REMOTE_HOST=
+REMOTE_USER=root
+REMOTE_PASS=
+
+# Path on the remote host where APKs are stored
+REMOTE_DIST_PATH=/mnt/teun/ultrasonic-builds
+
+# Target name used in status messages
+DEPLOY_TARGET_NAME=APK Hoster
+
+# Optional: Service name in docker-compose
+SERVICE_NAME=apk-hoster
