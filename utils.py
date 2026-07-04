@@ -1,3 +1,6 @@
+"""
+Utility functions for password hashing and verification.
+"""
 import bcrypt
 from config import logger
 

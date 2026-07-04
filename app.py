@@ -1,3 +1,8 @@
+"""
+Main FastAPI application for APK Hoster.
+Provides web interface and API for APK management.
+"""
+# pylint: disable=too-many-arguments, too-many-positional-arguments, too-many-locals, too-many-branches
 import os
 import shutil
 import urllib.parse
@@ -26,15 +31,15 @@ async def lifespan(app: FastAPI):
     logger.info("Initializing database and syncing files...")
     init_db()
     sync_db_with_files()
-    
+
     async def background_sync():
         while True:
             await asyncio.sleep(300) # 5 minutes
             try:
                 sync_db_with_files()
             except Exception as e:
-                logger.error(f"Background_sync error: {e}")
-                
+                logger.error("Background_sync error: %s", e)
+
     sync_task = asyncio.create_task(background_sync())
     yield
     logger.info("Shutting down background tasks...")
@@ -62,8 +67,10 @@ def format_notes(notes: str) -> str:
             result.append(f'{line}<br>')
     return "".join(result)
 
-templates.env.filters["format_size"] = lambda s: humanize.naturalsize(s, binary=True).replace("i", "")
-templates.env.filters["format_date"] = lambda d: d.strftime("%Y-%m-%d %H:%M") if isinstance(d, datetime) else d
+templates.env.filters["format_size"] = lambda s: \
+    humanize.naturalsize(s, binary=True).replace("i", "")
+templates.env.filters["format_date"] = lambda d: \
+    d.strftime("%Y-%m-%d %H:%M") if isinstance(d, datetime) else d
 templates.env.filters["format_notes"] = format_notes
 templates.env.filters["urlencode"] = lambda s: urllib.parse.quote(s, safe='')
 
@@ -100,28 +107,29 @@ def check_ip(request: Request) -> bool:
     allowed = [ip.strip() for ip in ALLOWED_IPS.split(",")]
     return client_ip in allowed
 
-def get_current_user(request: Request, session: Optional[str] = Cookie(None)) -> Optional[Dict[str, Any]]:
+def get_current_user(request: Request,
+                     session: Optional[str] = Cookie(None)) -> Optional[Dict[str, Any]]:
     """
     Authenticate the current user via header or session cookie.
     """
     x_password = request.headers.get("X-Upload-Password")
-    
+
     if x_password:
         users = db.fetchall("SELECT * FROM users")
         for user in users:
             if verify_password(x_password, user['password']):
                 return user
-    
+
     if session:
         users = db.fetchall("SELECT * FROM users")
         for user in users:
             if verify_password(session, user['password']):
                 return user
-                
+
     res = db.fetchone("SELECT COUNT(*) as count FROM users")
     if res and res['count'] == 0:
         return {"username": "anonymous", "permissions": "admin"}
-        
+
     return None
 
 def is_admin(user: Optional[Dict[str, Any]] = Depends(get_current_user)) -> bool:
@@ -139,21 +147,21 @@ def check_permission(user: Dict[str, Any], permission: str, apk_name: Optional[s
     """
     if not user:
         return False
-    
+
     perms = user.get('permissions', '').split(',')
     if 'admin' in perms:
         return True
-    
+
     if permission not in perms:
         return False
-        
+
     if apk_name:
         apk_filter = user.get('apk_filter')
         if apk_filter:
             filters = [f.strip() for f in apk_filter.split(',')]
             if not any(apk_name.startswith(f) for f in filters):
                 return False
-                
+
     return True
 
 def require_permission(permission: str):
@@ -176,14 +184,14 @@ async def index(request: Request, user: Optional[Dict[str, Any]] = Depends(get_c
     """
     if not user:
         return RedirectResponse(url="/login")
-    
+
     if not check_permission(user, 'view'):
         return HTMLResponse("Forbidden: No view permission", status_code=403)
 
     rows = db.fetchall("SELECT * FROM apks ORDER BY version_code DESC, build_date DESC")
     versions = []
     total_size = 0
-    
+
     scheme = request.url.scheme
     if request.headers.get("X-Forwarded-Proto"):
         scheme = request.headers.get("X-Forwarded-Proto")
@@ -194,7 +202,7 @@ async def index(request: Request, user: Optional[Dict[str, Any]] = Depends(get_c
         v = row
         if not check_permission(user, 'view', v['apk_name']):
             continue
-            
+
         if isinstance(v['build_date'], str):
             try:
                 v['build_date'] = datetime.fromisoformat(v['build_date'])
@@ -203,14 +211,14 @@ async def index(request: Request, user: Optional[Dict[str, Any]] = Depends(get_c
         v['url'] = f"{base_url}/{v['filename']}"
         versions.append(v)
         total_size += v['size']
-    
+
     perms = user.get('permissions', '').split(',')
     admin_status = 'admin' in perms
     can_delete = 'admin' in perms or 'delete' in perms
     can_download = 'admin' in perms or 'download' in perms
-    
+
     changelog = get_changelog()
-    
+
     return templates.TemplateResponse(
         request=request,
         name="index.html",
@@ -241,12 +249,12 @@ async def login_post(request: Request, username: str = Form(...), password: str 
     Handle login form submission.
     """
     user = db.fetchone("SELECT * FROM users WHERE username = ?", (username,))
-    
+
     if user and verify_password(password, user['password']):
         response = RedirectResponse(url="/", status_code=303)
         response.set_cookie(key="session", value=password, path="/")
         return response
-        
+
     return templates.TemplateResponse(request=request, name="login.html", context={"app_name": APP_NAME, "error": "Invalid username or password"})
 
 @app.get("/admin", response_class=HTMLResponse)
@@ -256,7 +264,7 @@ async def admin_get(request: Request, admin: bool = Depends(is_admin)):
     """
     if not admin:
         raise HTTPException(status_code=403, detail="Forbidden")
-    
+
     users = db.fetchall("SELECT * FROM users")
     return templates.TemplateResponse(
         request=request,
@@ -266,9 +274,9 @@ async def admin_get(request: Request, admin: bool = Depends(is_admin)):
 
 @app.post("/admin/add-user")
 async def add_user(
-    request: Request, 
-    username: str = Form(...), 
-    password: str = Form(...), 
+    request: Request,
+    username: str = Form(...),
+    password: str = Form(...),
     permissions: List[str] = Form([]),
     apk_filter: Optional[str] = Form(None),
     admin: bool = Depends(is_admin)
@@ -278,10 +286,10 @@ async def add_user(
     """
     if not admin:
         raise HTTPException(status_code=403, detail="Forbidden")
-    
+
     perm_str = ",".join(permissions)
     hashed_pw = hash_password(password)
-    db.execute("INSERT OR IGNORE INTO users (username, password, permissions, apk_filter) VALUES (?, ?, ?, ?)", 
+    db.execute("INSERT OR IGNORE INTO users (username, password, permissions, apk_filter) VALUES (?, ?, ?, ?)",
                  (username, hashed_pw, perm_str, apk_filter))
     return RedirectResponse(url="/admin", status_code=303)
 
@@ -292,10 +300,10 @@ async def delete_user(request: Request, username: str = Form(...), admin: bool =
     """
     if not admin:
         raise HTTPException(status_code=403, detail="Forbidden")
-    
+
     if username in ["admin", "ultrasonic"]:
-         logger.warning(f"Attempt to delete protected user: {username}")
-         return RedirectResponse(url="/admin", status_code=303)
+        logger.warning("Attempt to delete protected user: %s", username)
+        return RedirectResponse(url="/admin", status_code=303)
 
     db.execute("DELETE FROM users WHERE username = ?", (username,))
     return RedirectResponse(url="/admin", status_code=303)
@@ -307,11 +315,11 @@ async def edit_user_get(request: Request, username: str, admin: bool = Depends(i
     """
     if not admin:
         raise HTTPException(status_code=403, detail="Forbidden")
-    
+
     user = db.fetchone("SELECT * FROM users WHERE username = ?", (username,))
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-    
+
     return templates.TemplateResponse(
         request=request,
         name="edit_user.html",
@@ -320,10 +328,10 @@ async def edit_user_get(request: Request, username: str, admin: bool = Depends(i
 
 @app.post("/admin/edit-user")
 async def edit_user_post(
-    request: Request, 
-    username: str = Form(...), 
+    request: Request,
+    username: str = Form(...),
     new_username: str = Form(...),
-    password: Optional[str] = Form(None), 
+    password: Optional[str] = Form(None),
     permissions: List[str] = Form([]),
     apk_filter: Optional[str] = Form(None),
     admin: bool = Depends(is_admin)
@@ -333,17 +341,17 @@ async def edit_user_post(
     """
     if not admin:
         raise HTTPException(status_code=403, detail="Forbidden")
-    
+
     perm_str = ",".join(permissions)
     if password and password.strip():
         hashed_pw = hash_password(password)
         db.execute(
-            "UPDATE users SET username = ?, password = ?, permissions = ?, apk_filter = ? WHERE username = ?", 
+            "UPDATE users SET username = ?, password = ?, permissions = ?, apk_filter = ? WHERE username = ?",
             (new_username, hashed_pw, perm_str, apk_filter, username)
         )
     else:
         db.execute(
-            "UPDATE users SET username = ?, permissions = ?, apk_filter = ? WHERE username = ?", 
+            "UPDATE users SET username = ?, permissions = ?, apk_filter = ? WHERE username = ?",
             (new_username, perm_str, apk_filter, username)
         )
     return RedirectResponse(url="/admin", status_code=303)
@@ -369,16 +377,16 @@ async def get_version(request: Request, apk: str = "ultrasonic", user: Dict[str,
     row = db.fetchone("SELECT * FROM apks WHERE apk_name = ? ORDER BY version_code DESC, build_date DESC LIMIT 1", (apk,))
     if not row:
         row = db.fetchone("SELECT * FROM apks ORDER BY version_code DESC, build_date DESC LIMIT 1")
-    
+
     if not row:
         raise HTTPException(status_code=404, detail="No versions found")
-    
+
     v = row
     scheme = request.url.scheme
     if request.headers.get("X-Forwarded-Proto"):
         scheme = request.headers.get("X-Forwarded-Proto")
     host = request.headers.get("host", f"localhost:{PORT}")
-    
+
     version_info = {
         "apk": v['apk_name'],
         "versionName": v['version_name'],
@@ -404,7 +412,7 @@ async def add_apk(
     """
     if not check_ip(request):
         raise HTTPException(status_code=403, detail="Forbidden: IP not allowed")
-    
+
     effective_password = password or request.headers.get("X-Upload-Password")
     user = None
     if effective_password:
@@ -413,15 +421,15 @@ async def add_apk(
             if verify_password(effective_password, u['password']):
                 user = u
                 break
-    
+
     if not user:
         res = db.fetchone("SELECT COUNT(*) as count FROM users")
         if res and res['count'] == 0:
             user = {"username": "anonymous", "permissions": "admin"}
-            
+
     if not user:
         raise HTTPException(status_code=401, detail="Unauthorized")
-        
+
     perms = user.get('permissions', '').split(',')
     if 'admin' not in perms and 'upload' not in perms:
         raise HTTPException(status_code=403, detail="Forbidden: Missing upload permission")
@@ -449,10 +457,10 @@ async def delete_apk(request: Request, filename: str = Form(...), user: Dict[str
     base_name = os.path.basename(filename)
     full_path = os.path.join(DIST_DIR, base_name)
     db.execute("DELETE FROM apks WHERE filename = ?", (base_name,))
-    
+
     if os.path.exists(full_path):
         os.remove(full_path)
-    
+
     notes_file = base_name.replace(".apk", ".txt")
     notes_path = os.path.join(DIST_DIR, notes_file)
     if os.path.exists(notes_path):

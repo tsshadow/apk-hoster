@@ -1,3 +1,7 @@
+"""
+Configuration module for APK Hoster.
+Handles environment variables and global settings.
+"""
 import os
 import re
 import logging
@@ -14,7 +18,7 @@ logger = logging.getLogger("apk-hoster")
 
 # Application Configuration
 APP_NAME = os.getenv("APP_NAME", "ultrasonic")
-PORT = int(os.getenv("PORT", 8275))
+PORT = int(os.getenv("PORT", "8275"))
 ADMIN_PASSWORD = os.getenv("ADMIN_PASS", "")
 ULTRASONIC_PASSWORD = os.getenv("ULTRASONIC_PASSWORD", "")
 ALLOWED_IPS = os.getenv("ALLOWED_IPS", "")
@@ -22,7 +26,7 @@ ALLOWED_IPS = os.getenv("ALLOWED_IPS", "")
 # Database Config
 DB_TYPE = os.getenv("DB_TYPE", "sqlite").lower()
 MYSQL_HOST = os.getenv("MYSQL_HOST", "db")
-MYSQL_PORT = int(os.getenv("MYSQL_PORT", 3306))
+MYSQL_PORT = int(os.getenv("MYSQL_PORT", "3306"))
 MYSQL_USER = os.getenv("MYSQL_USER", "")
 MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD", "")
 MYSQL_DATABASE = os.getenv("MYSQL_DATABASE", "apk-hoster")
@@ -35,11 +39,11 @@ def get_dist_dir() -> str:
     """
     if os.path.exists("/mnt/apks"):
         return "/mnt/apks"
-    
+
     dist_dir = os.getenv("DIST_DIR")
     if dist_dir:
         return dist_dir
-        
+
     return "./dist"
 
 DIST_DIR = get_dist_dir()
