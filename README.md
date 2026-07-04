@@ -1,11 +1,16 @@
 # APK Hoster
 
-A simple Go-based service to host APK files with dynamic index generation and an upload API.
+A simple Go-based service to host APK files with dynamic index generation and an upload API. This service is designed to be self-hosted, e.g., on a NAS or a private server.
 
 ## Features
 - Dynamic index page listing all APKs in the `dist` directory.
 - Release notes support (via accompanying `.txt` files).
 - Secure upload API (`/api/add-apk`).
+- Admin interface to delete APKs.
+- Search/filter functionality on the index page.
+- QR codes for easy mobile downloads.
+- File size information.
+- Background filesystem synchronization.
 - IP whitelisting and password protection for uploads.
 - Automatic APK mime-type handling.
 
@@ -19,9 +24,9 @@ A simple Go-based service to host APK files with dynamic index generation and an
 
 2.  **Build and Run (Docker)**:
     ```bash
-    ./scripts/build.sh
-    docker-compose up -d
+    ./bup
     ```
+    This will build the Docker image and deploy it using `docker-compose`.
 
 3.  **Standalone Build**:
     ```bash
@@ -44,5 +49,8 @@ Upload a new APK.
   - `X-Upload-Password`: (Optional) Alternative to `password` field.
 
 ## Security
-- `UPLOAD_PASSWORD`: If set, all uploads must provide this password.
+- `UPLOAD_PASSWORD`: If set, all uploads and admin actions must provide this password.
 - `ALLOWED_IPS`: Comma-separated list of IPs allowed to upload.
+- `APP_NAME`: Name of the application displayed on the index page (default: `ultrasonic`).
+- `PORT`: Port to run the server on (default: `8275`).
+- `DIST_DIR`: Directory to serve APKs from (default: `./dist` or `/mnt/apks`).

@@ -22,6 +22,7 @@ fi
 
 TARGET="${DEPLOY_TARGET_NAME:-APK Hoster}"
 DOCKER_IMAGE="${DOCKER_IMAGE:-tsshadow/apk-hoster}"
+SERVICE_NAME="${SERVICE_NAME:-apk-hoster}"
 REMOTE_DIST_PATH="${REMOTE_DIST_PATH:-/mnt/teun/ultrasonic-builds}"
 
 if [ -n "$REMOTE_HOST" ]; then
@@ -36,6 +37,7 @@ if [ -n "$REMOTE_HOST" ]; then
         grep -v '^#' .env | sed 's/ *= */=/g' >> "$TEMP_ENV"
     fi
     export LOCAL_ENV_FILE="$TEMP_ENV"
+    export SERVICE_NAME="$SERVICE_NAME"
     
     # Use the generalized deployment script
     # Note: When standalone, ensure deploy-stack.sh is available or use a local version

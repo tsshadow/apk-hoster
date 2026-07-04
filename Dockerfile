@@ -1,8 +1,10 @@
 # Build stage
-FROM golang:1.22-alpine AS builder
+FROM golang:alpine AS builder
 
 WORKDIR /app
-COPY apk-hoster/main.go .
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
 RUN go build -o apk-hoster main.go
 
 # Final stage

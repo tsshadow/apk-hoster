@@ -9,6 +9,7 @@ services:
     environment:
       - UPLOAD_PASSWORD=${UPLOAD_PASSWORD}
       - ALLOWED_IPS=${ALLOWED_IPS}
+      - APP_NAME=${APP_NAME:-ultrasonic}
     volumes:
-      - ${REMOTE_DIST_PATH}:/app/dist
+      - ${REMOTE_DIST_PATH}:/mnt/apks
     restart: always

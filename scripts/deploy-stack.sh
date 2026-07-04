@@ -136,6 +136,16 @@ DEPLOY_CMD="
     echo \"Updating stack '$STACK_NAME' via: \$DOCKER_CMD\"
     \$DOCKER_CMD pull
     
+    # Try to remove conflicting container name if it exists and is not part of this project
+    EXISTING_ID=\$(docker ps -aq --filter \"name=^/${SERVICE_NAME}\$\" | head -n 1)
+    if [ -n \"\$EXISTING_ID\" ]; then
+        PROJECT=\$(docker inspect \"\$EXISTING_ID\" --format '{{ index .Config.Labels \"com.docker.compose.project\" }}' 2>/dev/null || true)
+        if [ \"\$PROJECT\" != \"$STACK_NAME\" ]; then
+            echo \"Removing conflicting container '$SERVICE_NAME' (project: '\$PROJECT')\"
+            docker rm -f \"\$EXISTING_ID\"
+        fi
+    fi
+
     if [ -n \"$SERVICE_NAME\" ] && \$DOCKER_CMD config --services | grep -q \"^$SERVICE_NAME\$\"; then
         echo \"Updating service: $SERVICE_NAME\"
         \$DOCKER_CMD up -d $SERVICE_NAME
