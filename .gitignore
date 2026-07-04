@@ -1,3 +1,7 @@
 .env
 apk-hoster
 dist/
+*.db
+cookies.txt
+__pycache__/
+.idea/

@@ -1,6 +1,6 @@
 # APK Hoster
 
-A simple Go-based service to host APK files with dynamic index generation and an upload API. This service is designed to be self-hosted, e.g., on a NAS or a private server.
+A simple Python-based service to host APK files with dynamic index generation and an upload API. This service is designed to be self-hosted, e.g., on a NAS or a private server.
 
 ## Features
 - Dynamic index page listing all APKs in the `dist` directory.
@@ -30,8 +30,8 @@ A simple Go-based service to host APK files with dynamic index generation and an
 
 3.  **Standalone Build**:
     ```bash
-    go build -o apk-hoster main.go
-    ./apk-hoster
+    pip install -r requirements.txt
+    python app.py
     ```
 
 ## API
@@ -44,12 +44,12 @@ Upload a new APK.
 - **Fields**:
   - `apk`: The APK file.
   - `release_notes`: (Optional) Text for release notes.
-  - `password`: (Optional) Upload password (if `UPLOAD_PASSWORD` is set).
+  - `password`: (Optional) Upload password.
 - **Headers**:
   - `X-Upload-Password`: (Optional) Alternative to `password` field.
 
 ## Security
-- `UPLOAD_PASSWORD`: If set, all uploads and admin actions must provide this password.
+- `ADMIN_PASS`: Used on first startup to create the `admin` user. Afterwards, the password is managed via the database.
 - `ALLOWED_IPS`: Comma-separated list of IPs allowed to upload.
 - `APP_NAME`: Name of the application displayed on the index page (default: `ultrasonic`).
 - `PORT`: Port to run the server on (default: `8275`).

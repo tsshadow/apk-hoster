@@ -37,6 +37,7 @@ if [ -n "$REMOTE_HOST" ]; then
         grep -v '^#' .env | sed 's/ *= */=/g' >> "$TEMP_ENV"
     fi
     export LOCAL_ENV_FILE="$TEMP_ENV"
+    export LOCAL_COMPOSE_FILE="$ROOT_DIR/docker-compose.yml"
     export SERVICE_NAME="$SERVICE_NAME"
     
     # Use the generalized deployment script

@@ -17,8 +17,23 @@ fi
 
 echo "--- Starting Build and Publish ---"
 
+# 0. Version Bump (if argument provided)
+if [ "$1" == "major" ] || [ "$1" == "minor" ] || [ "$1" == "patch" ]; then
+    source ./bump_version.sh "$1"
+    VERSION_NAME="v$NEW_VERSION"
+    
+    cd ..
+    git add .
+    git commit -m "chore: release $VERSION_NAME"
+    git tag -a "$VERSION_NAME" -m "Release $VERSION_NAME"
+    git push origin main --tags || echo "Warning: git push failed, continuing..."
+    cd scripts
+else
+    VERSION_NAME="latest"
+fi
+
 # Run build script (which also pushes the image)
-./build.sh
+VERSION_NAME=$VERSION_NAME ./build.sh
 
 # Run deploy script
 ./deploy.sh

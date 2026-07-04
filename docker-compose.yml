@@ -7,9 +7,24 @@ services:
     ports:
       - "8275:8275"
     environment:
-      - UPLOAD_PASSWORD=${UPLOAD_PASSWORD}
+      - ADMIN_PASS=${ADMIN_PASS}
       - ALLOWED_IPS=${ALLOWED_IPS}
       - APP_NAME=${APP_NAME:-ultrasonic}
+      - ULTRASONIC_PASSWORD=${ULTRASONIC_PASSWORD}
+      - DB_TYPE=${DB_TYPE:-sqlite}
+      - MYSQL_HOST=${MYSQL_HOST:-db}
+      - MYSQL_PORT=${MYSQL_PORT:-3306}
+      - MYSQL_USER=${MYSQL_USER:-apk-hoster}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-apk-hoster}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - ${REMOTE_DIST_PATH}:/mnt/apks
+    networks:
+      - default
+      - music-management_db
     restart: always
+
+networks:
+  music-management_db:
+    external: true
