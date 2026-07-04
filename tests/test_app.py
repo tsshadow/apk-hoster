@@ -1,8 +1,10 @@
 """
 Integration tests for the APK Hoster FastAPI application.
 """
+
 from utils import hash_password, verify_password, is_hashed
 from config import APK_REGEX
+
 
 def test_password_hashing():
     """
@@ -14,6 +16,7 @@ def test_password_hashing():
     assert is_hashed(hashed)
     assert verify_password(password, hashed)
     assert not verify_password("wrongpassword", hashed)
+
 
 def test_apk_regex():
     """
@@ -29,6 +32,7 @@ def test_apk_regex():
         assert match is not None
         assert match.groups() == expected
 
+
 def test_health_check(client):
     """
     Test the health check endpoint.
@@ -36,6 +40,7 @@ def test_health_check(client):
     response = client.get("/health")
     assert response.status_code == 200
     assert response.text == '"OK"'
+
 
 def test_unauthorized_access(client):
     """
@@ -45,17 +50,20 @@ def test_unauthorized_access(client):
     # FastAPI/Starlette uses 307 for some redirects, or 302/303
     assert response.status_code in [302, 303, 307]
 
+
 def test_login_success(client, admin_user):
     """
     Test successful login with valid credentials.
     """
-    response = client.post("/login", data={
-        "username": admin_user["username"],
-        "password": admin_user["password"]
-    }, follow_redirects=False)
+    response = client.post(
+        "/login",
+        data={"username": admin_user["username"], "password": admin_user["password"]},
+        follow_redirects=False,
+    )
     assert response.status_code == 303
     # Check if cookie is set
     assert "session" in response.cookies
+
 
 def test_api_version_unauthorized(client):
     """

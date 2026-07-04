@@ -1,48 +1,64 @@
 """
 Database interface for APK Hoster, supporting both SQLite and MySQL.
 """
+
 import os
 import sqlite3
 from datetime import datetime
 from typing import List, Optional, Any, Dict
 from config import (
-    DB_TYPE, MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASSWORD,
-    MYSQL_DATABASE, MYSQL_ROOT_PASSWORD, DB_PATH, DIST_DIR, APK_REGEX,
-    ADMIN_PASSWORD, ULTRASONIC_PASSWORD, logger
+    DB_TYPE,
+    MYSQL_HOST,
+    MYSQL_PORT,
+    MYSQL_USER,
+    MYSQL_PASSWORD,
+    MYSQL_DATABASE,
+    MYSQL_ROOT_PASSWORD,
+    DB_PATH,
+    DIST_DIR,
+    APK_REGEX,
+    ADMIN_PASSWORD,
+    ULTRASONIC_PASSWORD,
+    logger,
 )
 from utils import hash_password
 
 try:
     import mysql.connector
+
     MYSQL_AVAILABLE = True
 except ImportError:
     MYSQL_AVAILABLE = False
+
 
 class Database:
     """
     Unified database interface for SQLite and MySQL.
     """
+
     def __init__(self):
         self.type = DB_TYPE
 
     def _get_conn(self, database: Optional[str] = None, use_root: bool = False):
         if self.type == "mysql":
             if not MYSQL_AVAILABLE:
-                raise ImportError("mysql-connector-python is not installed but "
-                                 "DB_TYPE is set to mysql")
+                raise ImportError(
+                    "mysql-connector-python is not installed but "
+                    "DB_TYPE is set to mysql"
+                )
 
             user = "root" if use_root else MYSQL_USER
             password = MYSQL_ROOT_PASSWORD if use_root else MYSQL_PASSWORD
 
             config = {
-                'host': MYSQL_HOST,
-                'port': MYSQL_PORT,
-                'user': user,
-                'password': password,
-                'auth_plugin': 'mysql_native_password'
+                "host": MYSQL_HOST,
+                "port": MYSQL_PORT,
+                "user": user,
+                "password": password,
+                "auth_plugin": "mysql_native_password",
             }
             if database:
-                config['database'] = database
+                config["database"] = database
 
             return mysql.connector.connect(**config)
 
@@ -61,9 +77,13 @@ class Database:
                 cursor.execute(f"CREATE DATABASE IF NOT EXISTS `{MYSQL_DATABASE}`")
 
                 if MYSQL_ROOT_PASSWORD and MYSQL_USER:
-                    cursor.execute(f"CREATE USER IF NOT EXISTS '{MYSQL_USER}'@'%' "
-                                   f"IDENTIFIED BY '{MYSQL_PASSWORD}'")
-                    cursor.execute(f"GRANT ALL PRIVILEGES ON `{MYSQL_DATABASE}`.* TO '{MYSQL_USER}'@'%'")
+                    cursor.execute(
+                        f"CREATE USER IF NOT EXISTS '{MYSQL_USER}'@'%' "
+                        f"IDENTIFIED BY '{MYSQL_PASSWORD}'"
+                    )
+                    cursor.execute(
+                        f"GRANT ALL PRIVILEGES ON `{MYSQL_DATABASE}`.* TO '{MYSQL_USER}'@'%'"
+                    )
                     cursor.execute("FLUSH PRIVILEGES")
 
                 conn.commit()
@@ -132,7 +152,9 @@ class Database:
         finally:
             conn.close()
 
+
 db = Database()
+
 
 def migrate_sqlite_to_mysql():
     if db.type != "mysql":
@@ -140,7 +162,7 @@ def migrate_sqlite_to_mysql():
 
     try:
         res = db.fetchone("SELECT COUNT(*) as count FROM users")
-        if res and res['count'] > 0:
+        if res and res["count"] > 0:
             return
     except Exception:
         return
@@ -155,24 +177,38 @@ def migrate_sqlite_to_mysql():
 
         users = sqlite_conn.execute("SELECT * FROM users").fetchall()
         for u in users:
-            db.execute("INSERT OR IGNORE INTO users (username, password, permissions) VALUES (?, ?, ?)",
-                       (u['username'], u['password'], u['permissions']))
+            db.execute(
+                "INSERT OR IGNORE INTO users (username, password, permissions) VALUES (?, ?, ?)",
+                (u["username"], u["password"], u["permissions"]),
+            )
 
         apks = sqlite_conn.execute("SELECT * FROM apks").fetchall()
         for a in apks:
-            db.execute("INSERT OR IGNORE INTO apks (apk_name, version_name, version_code, filename, size, build_date, release_notes, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                       (a['apk_name'], a['version_name'], a['version_code'], a['filename'], a['size'], a['build_date'], a['release_notes'], a['created_at']))
+            db.execute(
+                "INSERT OR IGNORE INTO apks (apk_name, version_name, version_code, filename, size, build_date, release_notes, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                (
+                    a["apk_name"],
+                    a["version_name"],
+                    a["version_code"],
+                    a["filename"],
+                    a["size"],
+                    a["build_date"],
+                    a["release_notes"],
+                    a["created_at"],
+                ),
+            )
 
         sqlite_conn.close()
         logger.info("Migration completed successfully.")
     except Exception as e:
         logger.error(f"Migration failed: {e}")
 
+
 def init_db():
     db.ensure_db_exists()
 
     if db.type == "mysql":
-        db.execute('''
+        db.execute("""
             CREATE TABLE IF NOT EXISTS apks (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 apk_name VARCHAR(255),
@@ -184,8 +220,8 @@ def init_db():
                 release_notes TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
-        ''')
-        db.execute('''
+        """)
+        db.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 username VARCHAR(255) UNIQUE,
@@ -193,9 +229,9 @@ def init_db():
                 permissions TEXT,
                 apk_filter TEXT
             )
-        ''')
+        """)
     else:
-        db.execute('''
+        db.execute("""
             CREATE TABLE IF NOT EXISTS apks (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 apk_name TEXT,
@@ -207,8 +243,8 @@ def init_db():
                 release_notes TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
-        ''')
-        db.execute('''
+        """)
+        db.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT UNIQUE,
@@ -216,14 +252,14 @@ def init_db():
                 permissions TEXT DEFAULT 'view',
                 apk_filter TEXT
             )
-        ''')
+        """)
 
     migrate_sqlite_to_mysql()
 
     if db.type == "mysql":
         try:
             res = db.fetchall("SHOW COLUMNS FROM apks LIKE 'version_code'")
-            if res and "int" not in res[0]['Type'].lower():
+            if res and "int" not in res[0]["Type"].lower():
                 db.execute("ALTER TABLE apks MODIFY COLUMN version_code INT")
 
             res = db.fetchall("SHOW COLUMNS FROM users LIKE 'apk_filter'")
@@ -236,33 +272,40 @@ def init_db():
         conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         cursor = conn.execute("PRAGMA table_info(apks)")
-        columns = [row['name'] for row in cursor.fetchall()]
-        if 'size' not in columns:
+        columns = [row["name"] for row in cursor.fetchall()]
+        if "size" not in columns:
             conn.execute("ALTER TABLE apks ADD COLUMN size INTEGER DEFAULT 0")
-        if 'release_notes' not in columns:
+        if "release_notes" not in columns:
             conn.execute("ALTER TABLE apks ADD COLUMN release_notes TEXT")
-        if 'build_date' not in columns:
+        if "build_date" not in columns:
             conn.execute("ALTER TABLE apks ADD COLUMN build_date DATETIME")
 
         cursor = conn.execute("PRAGMA table_info(users)")
-        user_columns = [row['name'] for row in cursor.fetchall()]
-        if 'permissions' not in user_columns:
+        user_columns = [row["name"] for row in cursor.fetchall()]
+        if "permissions" not in user_columns:
             conn.execute("ALTER TABLE users ADD COLUMN permissions TEXT DEFAULT 'view'")
-        if 'apk_filter' not in user_columns:
+        if "apk_filter" not in user_columns:
             conn.execute("ALTER TABLE users ADD COLUMN apk_filter TEXT")
         conn.commit()
         conn.close()
 
     if ULTRASONIC_PASSWORD:
         hashed_pw = hash_password(ULTRASONIC_PASSWORD)
-        db.execute("INSERT OR IGNORE INTO users (username, password, permissions) VALUES (?, ?, ?)",
-                     ("ultrasonic", hashed_pw, "view,download,upload"))
-        db.execute("UPDATE users SET permissions = 'view,download,upload' WHERE username = 'ultrasonic'")
+        db.execute(
+            "INSERT OR IGNORE INTO users (username, password, permissions) VALUES (?, ?, ?)",
+            ("ultrasonic", hashed_pw, "view,download,upload"),
+        )
+        db.execute(
+            "UPDATE users SET permissions = 'view,download,upload' WHERE username = 'ultrasonic'"
+        )
 
     if ADMIN_PASSWORD:
         hashed_pw = hash_password(ADMIN_PASSWORD)
-        db.execute("INSERT OR IGNORE INTO users (username, password, permissions) VALUES (?, ?, ?)",
-                     ("admin", hashed_pw, "admin"))
+        db.execute(
+            "INSERT OR IGNORE INTO users (username, password, permissions) VALUES (?, ?, ?)",
+            ("admin", hashed_pw, "admin"),
+        )
+
 
 def sync_db_with_files():
     files = os.listdir(DIST_DIR)
@@ -295,16 +338,43 @@ def sync_db_with_files():
                 release_notes = f.read()
 
         if res:
-            if res['size'] == 0 or res['version_name'] == 'unknown' or not res['release_notes'] or res['apk_name'] != apk_name:
-                db.execute('''
+            if (
+                res["size"] == 0
+                or res["version_name"] == "unknown"
+                or not res["release_notes"]
+                or res["apk_name"] != apk_name
+            ):
+                db.execute(
+                    """
                     UPDATE apks SET apk_name=?, version_name=?, version_code=?, size=?, build_date=?, release_notes=?
                     WHERE filename=?
-                ''', (apk_name, version_name, version_code, stat.st_size, build_date, release_notes, filename))
+                """,
+                    (
+                        apk_name,
+                        version_name,
+                        version_code,
+                        stat.st_size,
+                        build_date,
+                        release_notes,
+                        filename,
+                    ),
+                )
                 logger.info(f"Updated {filename} in DB")
             continue
 
-        db.execute('''
+        db.execute(
+            """
             INSERT INTO apks (apk_name, version_name, version_code, filename, size, build_date, release_notes)
             VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''', (apk_name, version_name, version_code, filename, stat.st_size, build_date, release_notes))
+        """,
+            (
+                apk_name,
+                version_name,
+                version_code,
+                filename,
+                stat.st_size,
+                build_date,
+                release_notes,
+            ),
+        )
         logger.info(f"Synced {filename} to DB")

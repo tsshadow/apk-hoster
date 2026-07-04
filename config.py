@@ -2,6 +2,7 @@
 Configuration module for APK Hoster.
 Handles environment variables and global settings.
 """
+
 import os
 import re
 import logging
@@ -32,6 +33,7 @@ MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD", "")
 MYSQL_DATABASE = os.getenv("MYSQL_DATABASE", "apk-hoster")
 MYSQL_ROOT_PASSWORD = os.getenv("MYSQL_ROOT_PASSWORD", "")
 
+
 def get_dist_dir() -> str:
     """
     Get the directory where APKs are stored.
@@ -46,6 +48,7 @@ def get_dist_dir() -> str:
 
     return "./dist"
 
+
 DIST_DIR = get_dist_dir()
 if not os.path.exists(DIST_DIR):
     os.makedirs(DIST_DIR, exist_ok=True)
@@ -53,4 +56,4 @@ if not os.path.exists(DIST_DIR):
 DB_PATH = os.path.join(DIST_DIR, "apk-hoster.db")
 
 # Regex for APK parsing: apkname-v1.2.3-123.apk
-APK_REGEX = re.compile(r'^(.+)-v(.+)-(\d+)(?:-unsigned)?(?:-(debug))?\.apk$')
+APK_REGEX = re.compile(r"^(.+)-v(.+)-(\d+)(?:-unsigned)?(?:-(debug))?\.apk$")

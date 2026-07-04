@@ -3,3 +3,4 @@ httpx
 pylint
 pytest-asyncio
 pre-commit
+ruff

@@ -24,6 +24,11 @@ jobs:
         pip install -r requirements.txt
         pip install -r requirements-dev.txt
 
+    - name: Lint with ruff
+      run: |
+        ruff check .
+        ruff format --check .
+
     - name: Lint with pylint
       run: |
         # We allow the job to continue even if pylint fails for now,
