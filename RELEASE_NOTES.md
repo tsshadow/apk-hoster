@@ -1,4 +1,3 @@
 ### Added
-- Integrated versioning system (major, minor, patch)
-- Project changelog displayed in the web UI
-- Automated git tagging and pushing during release
+- Tabbed interface for APK list and Changelog
+- Moved changelog to a separate tab at the top of the page
