@@ -1,0 +1,455 @@
+Command finished with exit code 0.
+Command output:
+To github.com:tsshadow/apk-hoster.git
+ - [deleted]         v1.0.0
+error: tag 'v1.0.0' not found.
+--- Starting Build and Publish ---
+Version bumped from 0.0.0 to 1.0.0
+[main b94cdb8] chore: release v1.0.0
+ 20 files changed, 1337 insertions(+), 735 deletions(-)
+ create mode 100644 RELEASE_NOTES.md
+ create mode 100644 VERSION
+ create mode 100644 app.py
+ delete mode 100644 go.mod
+ delete mode 100644 go.sum
+ delete mode 100644 main.go
+ create mode 100644 requirements.txt
+ create mode 100755 scripts/bump_version.sh
+ create mode 100644 scripts/temp
+ create mode 100644 templates/admin.html
+ create mode 100644 templates/edit_user.html
+ create mode 100644 templates/index.html
+ create mode 100644 templates/login.html
+To github.com:tsshadow/apk-hoster.git
+ * [new tag]         v1.0.0 -> v1.0.0
+ ! [rejected]        main -> main (non-fast-forward)
+error: failed to push some refs to 'github.com:tsshadow/apk-hoster.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. If you want to integrate the remote changes,
+hint: use 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+Warning: git push failed, continuing...
+--- Building Docker Image: tsshadow/apk-hoster ---
+#0 building with "remote-lxc" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile:
+#1 transferring dockerfile: 357B 0.0s done
+#1 DONE 0.3s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim
+#2 ...
+
+#3 [auth] library/python:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim
+#2 DONE 1.1s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 96.08kB 0.0s done
+#5 DONE 0.0s
+
+#6 [1/6] FROM docker.io/library/python:3.12-slim@sha256:423ed6ab25b1921a477529254bfeeabf5855151dc2c3141699a1bfc852199fbf
+#6 resolve docker.io/library/python:3.12-slim@sha256:423ed6ab25b1921a477529254bfeeabf5855151dc2c3141699a1bfc852199fbf 0.0s done
+#6 sha256:aff2d9f8dc87f4c10bbb7f438f3a325169379776bdfad5c49e4be5acc3c2f192 0B / 1.29MB 0.2s
+#6 sha256:b32430367bf08f32c23778909985ac645d1794f0aeef670aa796a50c8751527d 0B / 248B 0.2s
+#6 sha256:aff2d9f8dc87f4c10bbb7f438f3a325169379776bdfad5c49e4be5acc3c2f192 1.29MB / 1.29MB 0.2s done
+#6 sha256:b32430367bf08f32c23778909985ac645d1794f0aeef670aa796a50c8751527d 248B / 248B 0.3s done
+#6 sha256:df79d931cd67092e2b8e48d8f6369922571efe4ee0f9af71636ce36600481492 0B / 12.11MB 0.2s
+#6 sha256:e95a6c7ea7d49b37920899b023ecd0e32796c976c1748491f76cae53ba86d13a 0B / 29.79MB 0.2s
+#6 sha256:e95a6c7ea7d49b37920899b023ecd0e32796c976c1748491f76cae53ba86d13a 2.10MB / 29.79MB 0.3s
+#6 sha256:df79d931cd67092e2b8e48d8f6369922571efe4ee0f9af71636ce36600481492 1.05MB / 12.11MB 0.6s
+#6 sha256:e95a6c7ea7d49b37920899b023ecd0e32796c976c1748491f76cae53ba86d13a 4.19MB / 29.79MB 0.5s
+#6 sha256:df79d931cd67092e2b8e48d8f6369922571efe4ee0f9af71636ce36600481492 2.10MB / 12.11MB 0.8s
+#6 sha256:e95a6c7ea7d49b37920899b023ecd0e32796c976c1748491f76cae53ba86d13a 7.34MB / 29.79MB 0.8s
+#6 sha256:df79d931cd67092e2b8e48d8f6369922571efe4ee0f9af71636ce36600481492 3.15MB / 12.11MB 1.1s
+#6 sha256:e95a6c7ea7d49b37920899b023ecd0e32796c976c1748491f76cae53ba86d13a 10.49MB / 29.79MB 0.9s
+#6 sha256:df79d931cd67092e2b8e48d8f6369922571efe4ee0f9af71636ce36600481492 4.19MB / 12.11MB 1.2s
+#6 sha256:e95a6c7ea7d49b37920899b023ecd0e32796c976c1748491f76cae53ba86d13a 12.58MB / 29.79MB 1.1s
+#6 sha256:df79d931cd67092e2b8e48d8f6369922571efe4ee0f9af71636ce36600481492 5.24MB / 12.11MB 1.4s
+#6 sha256:e95a6c7ea7d49b37920899b023ecd0e32796c976c1748491f76cae53ba86d13a 15.73MB / 29.79MB 1.2s
+#6 sha256:df79d931cd67092e2b8e48d8f6369922571efe4ee0f9af71636ce36600481492 6.29MB / 12.11MB 1.5s
+#6 sha256:e95a6c7ea7d49b37920899b023ecd0e32796c976c1748491f76cae53ba86d13a 17.83MB / 29.79MB 1.4s
+#6 sha256:df79d931cd67092e2b8e48d8f6369922571efe4ee0f9af71636ce36600481492 7.34MB / 12.11MB 1.7s
+#6 sha256:e95a6c7ea7d49b37920899b023ecd0e32796c976c1748491f76cae53ba86d13a 20.97MB / 29.79MB 1.5s
+#6 sha256:df79d931cd67092e2b8e48d8f6369922571efe4ee0f9af71636ce36600481492 8.39MB / 12.11MB 1.8s
+#6 sha256:e95a6c7ea7d49b37920899b023ecd0e32796c976c1748491f76cae53ba86d13a 24.12MB / 29.79MB 1.7s
+#6 sha256:df79d931cd67092e2b8e48d8f6369922571efe4ee0f9af71636ce36600481492 9.44MB / 12.11MB 2.0s
+#6 sha256:e95a6c7ea7d49b37920899b023ecd0e32796c976c1748491f76cae53ba86d13a 27.26MB / 29.79MB 1.8s
+#6 sha256:df79d931cd67092e2b8e48d8f6369922571efe4ee0f9af71636ce36600481492 10.49MB / 12.11MB 2.1s
+#6 sha256:e95a6c7ea7d49b37920899b023ecd0e32796c976c1748491f76cae53ba86d13a 29.79MB / 29.79MB 1.9s done
+#6 sha256:df79d931cd67092e2b8e48d8f6369922571efe4ee0f9af71636ce36600481492 12.11MB / 12.11MB 2.2s done
+#6 extracting sha256:e95a6c7ea7d49b37920899b023ecd0e32796c976c1748491f76cae53ba86d13a
+#6 extracting sha256:e95a6c7ea7d49b37920899b023ecd0e32796c976c1748491f76cae53ba86d13a 1.1s done
+#6 DONE 3.3s
+
+#6 [1/6] FROM docker.io/library/python:3.12-slim@sha256:423ed6ab25b1921a477529254bfeeabf5855151dc2c3141699a1bfc852199fbf
+#6 extracting sha256:aff2d9f8dc87f4c10bbb7f438f3a325169379776bdfad5c49e4be5acc3c2f192
+#6 extracting sha256:aff2d9f8dc87f4c10bbb7f438f3a325169379776bdfad5c49e4be5acc3c2f192 1.0s done
+#6 DONE 4.4s
+
+#6 [1/6] FROM docker.io/library/python:3.12-slim@sha256:423ed6ab25b1921a477529254bfeeabf5855151dc2c3141699a1bfc852199fbf
+#6 extracting sha256:df79d931cd67092e2b8e48d8f6369922571efe4ee0f9af71636ce36600481492
+#6 extracting sha256:df79d931cd67092e2b8e48d8f6369922571efe4ee0f9af71636ce36600481492 0.6s done
+#6 extracting sha256:b32430367bf08f32c23778909985ac645d1794f0aeef670aa796a50c8751527d
+#6 extracting sha256:b32430367bf08f32c23778909985ac645d1794f0aeef670aa796a50c8751527d 0.0s done
+#6 DONE 5.0s
+
+#7 [2/6] WORKDIR /app
+#7 DONE 0.0s
+
+#8 [3/6] COPY requirements.txt .
+#8 DONE 0.0s
+
+#9 [4/6] RUN pip install --no-cache-dir -r requirements.txt
+#9 2.128 Collecting fastapi (from -r requirements.txt (line 1))
+#9 2.165   Downloading fastapi-0.139.0-py3-none-any.whl.metadata (26 kB)
+#9 2.204 Collecting jinja2 (from -r requirements.txt (line 3))
+#9 2.211   Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+#9 2.235 Collecting python-multipart (from -r requirements.txt (line 4))
+#9 2.243   Downloading python_multipart-0.0.32-py3-none-any.whl.metadata (2.1 kB)
+#9 2.271 Collecting python-dotenv (from -r requirements.txt (line 5))
+#9 2.279   Downloading python_dotenv-1.2.2-py3-none-any.whl.metadata (27 kB)
+#9 2.312 Collecting humanize (from -r requirements.txt (line 6))
+#9 2.326   Downloading humanize-4.16.0-py3-none-any.whl.metadata (8.0 kB)
+#9 2.380 Collecting bcrypt (from -r requirements.txt (line 7))
+#9 2.387   Downloading bcrypt-5.0.0-cp39-abi3-manylinux_2_34_x86_64.whl.metadata (10 kB)
+#9 2.456 Collecting mysql-connector-python (from -r requirements.txt (line 8))
+#9 2.465   Downloading mysql_connector_python-9.7.0-cp312-cp312-manylinux_2_28_x86_64.whl.metadata (11 kB)
+#9 2.516 Collecting uvicorn[standard] (from -r requirements.txt (line 2))
+#9 2.526   Downloading uvicorn-0.50.0-py3-none-any.whl.metadata (6.7 kB)
+#9 2.583 Collecting starlette>=0.46.0 (from fastapi->-r requirements.txt (line 1))
+#9 2.590   Downloading starlette-1.3.1-py3-none-any.whl.metadata (6.4 kB)
+#9 2.777 Collecting pydantic>=2.9.0 (from fastapi->-r requirements.txt (line 1))
+#9 2.785   Downloading pydantic-2.13.4-py3-none-any.whl.metadata (109 kB)
+#9 2.826 Collecting typing-extensions>=4.8.0 (from fastapi->-r requirements.txt (line 1))
+#9 2.834   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+#9 2.858 Collecting typing-inspection>=0.4.2 (from fastapi->-r requirements.txt (line 1))
+#9 2.866   Downloading typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+#9 2.891 Collecting annotated-doc>=0.0.2 (from fastapi->-r requirements.txt (line 1))
+#9 2.899   Downloading annotated_doc-0.0.4-py3-none-any.whl.metadata (6.6 kB)
+#9 2.938 Collecting click>=7.0 (from uvicorn[standard]->-r requirements.txt (line 2))
+#9 2.946   Downloading click-8.4.2-py3-none-any.whl.metadata (2.6 kB)
+#9 2.971 Collecting h11>=0.8 (from uvicorn[standard]->-r requirements.txt (line 2))
+#9 2.979   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+#9 3.036 Collecting httptools>=0.8.0 (from uvicorn[standard]->-r requirements.txt (line 2))
+#9 3.044   Downloading httptools-0.8.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (3.5 kB)
+#9 3.110 Collecting pyyaml>=5.1 (from uvicorn[standard]->-r requirements.txt (line 2))
+#9 3.118   Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+#9 3.180 Collecting uvloop>=0.15.1 (from uvicorn[standard]->-r requirements.txt (line 2))
+#9 3.188   Downloading uvloop-0.22.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (4.9 kB)
+#9 3.328 Collecting watchfiles>=0.20 (from uvicorn[standard]->-r requirements.txt (line 2))
+#9 3.336   Downloading watchfiles-1.2.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.9 kB)
+#9 3.418 Collecting websockets>=11.0 (from uvicorn[standard]->-r requirements.txt (line 2))
+#9 3.425   Downloading websockets-16.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (6.8 kB)
+#9 3.480 Collecting MarkupSafe>=2.0 (from jinja2->-r requirements.txt (line 3))
+#9 3.488   Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+#9 3.510 Collecting annotated-types>=0.6.0 (from pydantic>=2.9.0->fastapi->-r requirements.txt (line 1))
+#9 3.517   Downloading annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+#9 4.393 Collecting pydantic-core==2.46.4 (from pydantic>=2.9.0->fastapi->-r requirements.txt (line 1))
+#9 4.402   Downloading pydantic_core-2.46.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.6 kB)
+#9 4.442 Collecting anyio<5,>=3.6.2 (from starlette>=0.46.0->fastapi->-r requirements.txt (line 1))
+#9 4.451   Downloading anyio-4.14.1-py3-none-any.whl.metadata (4.6 kB)
+#9 4.517 Collecting idna>=2.8 (from anyio<5,>=3.6.2->starlette>=0.46.0->fastapi->-r requirements.txt (line 1))
+#9 4.523   Downloading idna-3.18-py3-none-any.whl.metadata (6.1 kB)
+#9 4.543 Downloading fastapi-0.139.0-py3-none-any.whl (130 kB)
+#9 4.555 Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+#9 4.566 Downloading python_multipart-0.0.32-py3-none-any.whl (30 kB)
+#9 4.575 Downloading python_dotenv-1.2.2-py3-none-any.whl (22 kB)
+#9 4.583 Downloading humanize-4.16.0-py3-none-any.whl (137 kB)
+#9 4.594 Downloading bcrypt-5.0.0-cp39-abi3-manylinux_2_34_x86_64.whl (278 kB)
+#9 4.612 Downloading mysql_connector_python-9.7.0-cp312-cp312-manylinux_2_28_x86_64.whl (21.7 MB)
+#9 5.363    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 21.7/21.7 MB 28.9 MB/s eta 0:00:00
+#9 5.372 Downloading annotated_doc-0.0.4-py3-none-any.whl (5.3 kB)
+#9 5.379 Downloading click-8.4.2-py3-none-any.whl (119 kB)
+#9 5.390 Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+#9 5.398 Downloading httptools-0.8.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (523 kB)
+#9 5.421 Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+#9 5.430 Downloading pydantic-2.13.4-py3-none-any.whl (472 kB)
+#9 5.455 Downloading pydantic_core-2.46.4-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+#9 5.522    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 29.9 MB/s eta 0:00:00
+#9 5.531 Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
+#9 5.558    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.9/807.9 kB 32.5 MB/s eta 0:00:00
+#9 5.566 Downloading starlette-1.3.1-py3-none-any.whl (73 kB)
+#9 5.578 Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+#9 5.585 Downloading typing_inspection-0.4.2-py3-none-any.whl (14 kB)
+#9 5.593 Downloading uvloop-0.22.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (4.4 MB)
+#9 5.745    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.4/4.4 MB 29.4 MB/s eta 0:00:00
+#9 5.756 Downloading watchfiles-1.2.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (456 kB)
+#9 5.778 Downloading websockets-16.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (184 kB)
+#9 5.792 Downloading uvicorn-0.50.0-py3-none-any.whl (72 kB)
+#9 5.801 Downloading annotated_types-0.7.0-py3-none-any.whl (13 kB)
+#9 5.809 Downloading anyio-4.14.1-py3-none-any.whl (124 kB)
+#9 5.821 Downloading idna-3.18-py3-none-any.whl (65 kB)
+#9 5.958 Installing collected packages: websockets, uvloop, typing-extensions, pyyaml, python-multipart, python-dotenv, mysql-connector-python, MarkupSafe, idna, humanize, httptools, h11, click, bcrypt, annotated-types, annotated-doc, uvicorn, typing-inspection, pydantic-core, jinja2, anyio, watchfiles, starlette, pydantic, fastapi
+#9 8.244 Successfully installed MarkupSafe-3.0.3 annotated-doc-0.0.4 annotated-types-0.7.0 anyio-4.14.1 bcrypt-5.0.0 click-8.4.2 fastapi-0.139.0 h11-0.16.0 httptools-0.8.0 humanize-4.16.0 idna-3.18 jinja2-3.1.6 mysql-connector-python-9.7.0 pydantic-2.13.4 pydantic-core-2.46.4 python-dotenv-1.2.2 python-multipart-0.0.32 pyyaml-6.0.3 starlette-1.3.1 typing-extensions-4.16.0 typing-inspection-0.4.2 uvicorn-0.50.0 uvloop-0.22.1 watchfiles-1.2.0 websockets-16.0
+#9 8.245 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#9 8.328 
+#9 8.328 [notice] A new release of pip is available: 25.0.1 -> 26.1.2
+#9 8.328 [notice] To update, run: pip install --upgrade pip
+#9 DONE 9.2s
+
+#10 [5/6] COPY . .
+#10 DONE 0.1s
+
+#11 [6/6] RUN mkdir -p dist
+#11 DONE 0.2s
+
+#12 exporting to image
+#12 exporting layers
+#12 exporting layers 6.3s done
+#12 exporting manifest sha256:a7dbc485a0d3a586609841c6e008417ac6440782a609082f02dc90a3a1077b62 done
+#12 exporting config sha256:3ced982e11bb4d2d134128f8b2c3faafa9d1c7a594e56c6dec42b95d76d3ca4e done
+#12 exporting attestation manifest sha256:81978b66893fe46e42aebe6ffe18d96593185e1ca405629e0ba36a26299ec818 0.0s done
+#12 exporting manifest list sha256:02ae351095c320d2175a356968b761820395cd0c0ba7bc2da248e0ecb46e3832 done
+#12 naming to docker.io/tsshadow/apk-hoster:latest done
+#12 unpacking to docker.io/tsshadow/apk-hoster:latest
+#12 unpacking to docker.io/tsshadow/apk-hoster:latest 2.0s done
+#12 naming to docker.io/tsshadow/apk-hoster:v1.0.0 done
+#12 unpacking to docker.io/tsshadow/apk-hoster:v1.0.0 0.0s done
+#12 DONE 8.4s
+--- Pushing Docker Image: tsshadow/apk-hoster ---
+The push refers to repository [docker.io/tsshadow/apk-hoster]
+ed6f1014c8eb: Waiting
+aff2d9f8dc87: Waiting
+82c12eebf0df: Waiting
+4f4fb700ef54: Waiting
+b32430367bf0: Waiting
+e95a6c7ea7d4: Waiting
+7ce749d5ef78: Waiting
+27a6af719772: Waiting
+df79d931cd67: Waiting
+7d6d3fd0ab78: Waiting
+82c12eebf0df: Waiting
+4f4fb700ef54: Waiting
+b32430367bf0: Waiting
+e95a6c7ea7d4: Waiting
+7ce749d5ef78: Waiting
+27a6af719772: Waiting
+df79d931cd67: Waiting
+7d6d3fd0ab78: Waiting
+ed6f1014c8eb: Waiting
+aff2d9f8dc87: Waiting
+e95a6c7ea7d4: Waiting
+7ce749d5ef78: Waiting
+27a6af719772: Waiting
+df79d931cd67: Waiting
+7d6d3fd0ab78: Waiting
+ed6f1014c8eb: Waiting
+aff2d9f8dc87: Waiting
+82c12eebf0df: Waiting
+4f4fb700ef54: Waiting
+b32430367bf0: Waiting
+7d6d3fd0ab78: Waiting
+ed6f1014c8eb: Waiting
+aff2d9f8dc87: Waiting
+82c12eebf0df: Waiting
+4f4fb700ef54: Waiting
+b32430367bf0: Waiting
+e95a6c7ea7d4: Waiting
+7ce749d5ef78: Waiting
+27a6af719772: Waiting
+df79d931cd67: Waiting
+7d6d3fd0ab78: Waiting
+ed6f1014c8eb: Waiting
+aff2d9f8dc87: Waiting
+82c12eebf0df: Waiting
+4f4fb700ef54: Waiting
+b32430367bf0: Waiting
+e95a6c7ea7d4: Waiting
+7ce749d5ef78: Waiting
+27a6af719772: Waiting
+df79d931cd67: Waiting
+27a6af719772: Waiting
+df79d931cd67: Waiting
+7d6d3fd0ab78: Waiting
+ed6f1014c8eb: Waiting
+aff2d9f8dc87: Waiting
+82c12eebf0df: Waiting
+4f4fb700ef54: Waiting
+b32430367bf0: Waiting
+e95a6c7ea7d4: Waiting
+7ce749d5ef78: Waiting
+82c12eebf0df: Waiting
+4f4fb700ef54: Waiting
+b32430367bf0: Layer already exists
+e95a6c7ea7d4: Layer already exists
+7ce749d5ef78: Waiting
+27a6af719772: Waiting
+df79d931cd67: Layer already exists
+7d6d3fd0ab78: Waiting
+ed6f1014c8eb: Waiting
+aff2d9f8dc87: Layer already exists
+82c12eebf0df: Waiting
+4f4fb700ef54: Waiting
+7ce749d5ef78: Waiting
+27a6af719772: Waiting
+7d6d3fd0ab78: Waiting
+ed6f1014c8eb: Waiting
+4f4fb700ef54: Waiting
+7d6d3fd0ab78: Waiting
+4f4fb700ef54: Pushed
+82c12eebf0df: Pushed
+7ce749d5ef78: Pushed
+27a6af719772: Pushed
+7d6d3fd0ab78: Pushed
+ed6f1014c8eb: Pushed
+latest: digest: sha256:02ae351095c320d2175a356968b761820395cd0c0ba7bc2da248e0ecb46e3832 size: 856
+The push refers to repository [docker.io/tsshadow/apk-hoster]
+aff2d9f8dc87: Waiting
+7ce749d5ef78: Waiting
+7d6d3fd0ab78: Waiting
+27a6af719772: Waiting
+e95a6c7ea7d4: Waiting
+df79d931cd67: Waiting
+b32430367bf0: Waiting
+ed6f1014c8eb: Waiting
+82c12eebf0df: Waiting
+4f4fb700ef54: Waiting
+e95a6c7ea7d4: Waiting
+df79d931cd67: Waiting
+b32430367bf0: Waiting
+ed6f1014c8eb: Waiting
+82c12eebf0df: Waiting
+4f4fb700ef54: Waiting
+aff2d9f8dc87: Waiting
+7ce749d5ef78: Waiting
+7d6d3fd0ab78: Waiting
+27a6af719772: Waiting
+82c12eebf0df: Waiting
+4f4fb700ef54: Waiting
+aff2d9f8dc87: Waiting
+7ce749d5ef78: Waiting
+7d6d3fd0ab78: Waiting
+27a6af719772: Waiting
+e95a6c7ea7d4: Waiting
+df79d931cd67: Waiting
+b32430367bf0: Waiting
+ed6f1014c8eb: Waiting
+b32430367bf0: Waiting
+ed6f1014c8eb: Waiting
+82c12eebf0df: Waiting
+4f4fb700ef54: Waiting
+aff2d9f8dc87: Waiting
+7ce749d5ef78: Waiting
+7d6d3fd0ab78: Waiting
+27a6af719772: Waiting
+e95a6c7ea7d4: Waiting
+df79d931cd67: Waiting
+82c12eebf0df: Waiting
+4f4fb700ef54: Waiting
+aff2d9f8dc87: Waiting
+7ce749d5ef78: Waiting
+7d6d3fd0ab78: Waiting
+27a6af719772: Layer already exists
+e95a6c7ea7d4: Waiting
+df79d931cd67: Waiting
+b32430367bf0: Waiting
+ed6f1014c8eb: Waiting
+82c12eebf0df: Waiting
+4f4fb700ef54: Layer already exists
+aff2d9f8dc87: Waiting
+7ce749d5ef78: Waiting
+7d6d3fd0ab78: Waiting
+e95a6c7ea7d4: Waiting
+df79d931cd67: Waiting
+b32430367bf0: Waiting
+ed6f1014c8eb: Waiting
+7ce749d5ef78: Layer already exists
+7d6d3fd0ab78: Layer already exists
+e95a6c7ea7d4: Layer already exists
+df79d931cd67: Layer already exists
+b32430367bf0: Layer already exists
+ed6f1014c8eb: Layer already exists
+82c12eebf0df: Already exists
+aff2d9f8dc87: Layer already exists
+v1.0.0: digest: sha256:02ae351095c320d2175a356968b761820395cd0c0ba7bc2da248e0ecb46e3832 size: 856
+--- apk-hoster Docker build and push completed ---
+--- Starting remote deployment for stack: apk-hoster ---
+Using local configuration file: /home/teun/git/apk-hoster/docker-compose.yml
+Using environment file: /tmp/.env.apk-hoster
+Updating stack 'apk-hoster' via: docker-compose --env-file /tmp/.env.apk-hoster -f /tmp/docker-compose.apk-hoster.yml -p apk-hoster
+Pulling apk-hoster ... 
+Pulling apk-hoster ... pulling from tsshadow/apk-hoster
+Pulling apk-hoster ... already exists
+Pulling apk-hoster ... already exists
+Pulling apk-hoster ... already exists
+Pulling apk-hoster ... already exists
+Pulling apk-hoster ... pulling fs layer
+Pulling apk-hoster ... pulling fs layer
+Pulling apk-hoster ... pulling fs layer
+Pulling apk-hoster ... pulling fs layer
+Pulling apk-hoster ... pulling fs layer
+Pulling apk-hoster ... waiting
+Pulling apk-hoster ... downloading (100.0%)
+Pulling apk-hoster ... verifying checksum
+Pulling apk-hoster ... download complete
+Pulling apk-hoster ... downloading (100.0%)
+Pulling apk-hoster ... download complete
+Pulling apk-hoster ... extracting (100.0%)
+Pulling apk-hoster ... extracting (100.0%)
+Pulling apk-hoster ... pull complete
+Pulling apk-hoster ... extracting (100.0%)
+Pulling apk-hoster ... extracting (100.0%)
+Pulling apk-hoster ... pull complete
+Pulling apk-hoster ... downloading (100.0%)
+Pulling apk-hoster ... verifying checksum
+Pulling apk-hoster ... download complete
+Pulling apk-hoster ... downloading (1.0%)
+Pulling apk-hoster ... downloading (4.1%)
+Pulling apk-hoster ... downloading (14.0%)
+Pulling apk-hoster ... downloading (7.1%)
+Pulling apk-hoster ... downloading (13.3%)
+Pulling apk-hoster ... downloading (54.6%)
+Pulling apk-hoster ... downloading (100.0%)
+Pulling apk-hoster ... verifying checksum
+Pulling apk-hoster ... download complete
+Pulling apk-hoster ... downloading (21.4%)
+Pulling apk-hoster ... downloading (29.5%)
+Pulling apk-hoster ... downloading (37.6%)
+Pulling apk-hoster ... downloading (45.8%)
+Pulling apk-hoster ... downloading (53.9%)
+Pulling apk-hoster ... downloading (62.0%)
+Pulling apk-hoster ... downloading (70.2%)
+Pulling apk-hoster ... downloading (78.3%)
+Pulling apk-hoster ... downloading (86.4%)
+Pulling apk-hoster ... downloading (94.5%)
+Pulling apk-hoster ... verifying checksum
+Pulling apk-hoster ... download complete
+Pulling apk-hoster ... extracting (1.0%)
+Pulling apk-hoster ... extracting (9.2%)
+Pulling apk-hoster ... extracting (18.3%)
+Pulling apk-hoster ... extracting (24.4%)
+Pulling apk-hoster ... extracting (30.5%)
+Pulling apk-hoster ... extracting (39.7%)
+Pulling apk-hoster ... extracting (54.9%)
+Pulling apk-hoster ... extracting (61.0%)
+Pulling apk-hoster ... extracting (68.2%)
+Pulling apk-hoster ... extracting (70.2%)
+Pulling apk-hoster ... extracting (77.3%)
+Pulling apk-hoster ... extracting (84.4%)
+Pulling apk-hoster ... extracting (91.6%)
+Pulling apk-hoster ... extracting (97.7%)
+Pulling apk-hoster ... extracting (100.0%)
+Pulling apk-hoster ... pull complete
+Pulling apk-hoster ... extracting (28.7%)
+Pulling apk-hoster ... extracting (100.0%)
+Pulling apk-hoster ... extracting (100.0%)
+Pulling apk-hoster ... pull complete
+Pulling apk-hoster ... extracting (100.0%)
+Pulling apk-hoster ... extracting (100.0%)
+Pulling apk-hoster ... pull complete
+Pulling apk-hoster ... digest: sha256:02ae351095c320d217...
+Pulling apk-hoster ... status: downloaded newer image fo...
+Pulling apk-hoster ... done
+Updating service: apk-hoster
+Recreating apk-hoster ... 
+Recreating apk-hoster ... done
+--- Stack 'apk-hoster' deployment completed successfully ---
+--- apk-hoster Deployment completed successfully ---
+--- Build and Publish completed successfully ---

@@ -2,7 +2,9 @@
 set -e
 
 # Configuration
-ROOT_DIR=$(readlink -f "$(dirname "$0")/..")
+# Find the root directory (where .git usually is)
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+ROOT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
 VERSION_FILE="$ROOT_DIR/VERSION"
 CHANGELOG_FILE="$ROOT_DIR/changelog.md"
 RELEASE_NOTES_FILE="$ROOT_DIR/RELEASE_NOTES.md"
@@ -68,6 +70,6 @@ fi
     echo ""
     echo ""
     [ -f "$CHANGELOG_FILE" ] && cat "$CHANGELOG_FILE"
-} > temp && mv temp "$CHANGELOG_FILE"
+} > "$ROOT_DIR/temp_changelog" && mv "$ROOT_DIR/temp_changelog" "$CHANGELOG_FILE"
 
 export NEW_VERSION
