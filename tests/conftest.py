@@ -9,6 +9,11 @@ from app import app, init_db
 from database import db
 
 
+import config
+import database
+from utils import hash_password
+
+
 @pytest.fixture(scope="session", autouse=True)
 def setup_test_db():
     """
@@ -18,8 +23,6 @@ def setup_test_db():
     # Use a separate test database
     test_db_path = "test-apk-hoster.db"
     # Override global DB_PATH for tests
-    import config
-    import database
 
     original_db_path = config.DB_PATH
     config.DB_PATH = test_db_path
@@ -52,8 +55,6 @@ def admin_user():
     Fixture that ensures an admin user exists and returns its credentials.
     """
     # Ensure admin user exists in test DB
-    from utils import hash_password
-
     db.execute(
         "INSERT OR IGNORE INTO users (username, password, permissions) VALUES (?, ?, ?)",
         ("testadmin", hash_password("adminpass"), "admin"),

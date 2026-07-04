@@ -2,6 +2,7 @@
 Database interface for APK Hoster, supporting both SQLite and MySQL.
 """
 
+# pylint: disable=too-many-branches, too-many-locals, broad-exception-caught
 import os
 import sqlite3
 from datetime import datetime
@@ -128,8 +129,8 @@ class Database:
                 res = cursor.fetchall()
                 cursor.close()
                 return res or []
-            else:
-                return [dict(row) for row in conn.execute(query, params).fetchall()]
+
+            return [dict(row) for row in conn.execute(query, params).fetchall()]
         finally:
             conn.close()
 
@@ -146,9 +147,9 @@ class Database:
                 res = cursor.fetchone()
                 cursor.close()
                 return res
-            else:
-                row = conn.execute(query, params).fetchone()
-                return dict(row) if row else None
+
+            row = conn.execute(query, params).fetchone()
+            return dict(row) if row else None
         finally:
             conn.close()
 
@@ -157,6 +158,9 @@ db = Database()
 
 
 def migrate_sqlite_to_mysql():
+    """
+    Migrate data from SQLite to MySQL if applicable.
+    """
     if db.type != "mysql":
         return
 
@@ -164,7 +168,7 @@ def migrate_sqlite_to_mysql():
         res = db.fetchone("SELECT COUNT(*) as count FROM users")
         if res and res["count"] > 0:
             return
-    except Exception:
+    except (sqlite3.Error, Exception):
         return
 
     if not os.path.exists(DB_PATH):
@@ -178,14 +182,17 @@ def migrate_sqlite_to_mysql():
         users = sqlite_conn.execute("SELECT * FROM users").fetchall()
         for u in users:
             db.execute(
-                "INSERT OR IGNORE INTO users (username, password, permissions) VALUES (?, ?, ?)",
+                "INSERT OR IGNORE INTO users (username, password, permissions) "
+                "VALUES (?, ?, ?)",
                 (u["username"], u["password"], u["permissions"]),
             )
 
         apks = sqlite_conn.execute("SELECT * FROM apks").fetchall()
         for a in apks:
             db.execute(
-                "INSERT OR IGNORE INTO apks (apk_name, version_name, version_code, filename, size, build_date, release_notes, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT OR IGNORE INTO apks (apk_name, version_name, version_code, "
+                "filename, size, build_date, release_notes, created_at) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 (
                     a["apk_name"],
                     a["version_name"],
@@ -200,11 +207,14 @@ def migrate_sqlite_to_mysql():
 
         sqlite_conn.close()
         logger.info("Migration completed successfully.")
-    except Exception as e:
-        logger.error(f"Migration failed: {e}")
+    except (sqlite3.Error, Exception) as e:
+        logger.error("Migration failed: %s", e)
 
 
 def init_db():
+    """
+    Initialize the database, creating tables and default users.
+    """
     db.ensure_db_exists()
 
     if db.type == "mysql":
@@ -265,8 +275,8 @@ def init_db():
             res = db.fetchall("SHOW COLUMNS FROM users LIKE 'apk_filter'")
             if not res:
                 db.execute("ALTER TABLE users ADD COLUMN apk_filter TEXT")
-        except Exception as e:
-            logger.error(f"MySQL migration error: {e}")
+        except (mysql.connector.Error, Exception) as e:
+            logger.error("MySQL migration error: %s", e)
 
     if db.type == "sqlite":
         conn = sqlite3.connect(DB_PATH)
@@ -308,6 +318,9 @@ def init_db():
 
 
 def sync_db_with_files():
+    """
+    Synchronize the database with files in the distribution directory.
+    """
     files = os.listdir(DIST_DIR)
     for filename in files:
         if not filename.endswith(".apk"):
@@ -345,10 +358,8 @@ def sync_db_with_files():
                 or res["apk_name"] != apk_name
             ):
                 db.execute(
-                    """
-                    UPDATE apks SET apk_name=?, version_name=?, version_code=?, size=?, build_date=?, release_notes=?
-                    WHERE filename=?
-                """,
+                    "UPDATE apks SET apk_name=?, version_name=?, version_code=?, "
+                    "size=?, build_date=?, release_notes=? WHERE filename=?",
                     (
                         apk_name,
                         version_name,
@@ -359,14 +370,12 @@ def sync_db_with_files():
                         filename,
                     ),
                 )
-                logger.info(f"Updated {filename} in DB")
+                logger.info("Updated %s in DB", filename)
             continue
 
         db.execute(
-            """
-            INSERT INTO apks (apk_name, version_name, version_code, filename, size, build_date, release_notes)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        """,
+            "INSERT INTO apks (apk_name, version_name, version_code, filename, "
+            "size, build_date, release_notes) VALUES (?, ?, ?, ?, ?, ?, ?)",
             (
                 apk_name,
                 version_name,
@@ -377,4 +386,4 @@ def sync_db_with_files():
                 release_notes,
             ),
         )
-        logger.info(f"Synced {filename} to DB")
+        logger.info("Synced %s to DB", filename)

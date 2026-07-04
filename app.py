@@ -4,10 +4,12 @@ Provides web interface and API for APK management.
 """
 
 # pylint: disable=too-many-arguments, too-many-positional-arguments, too-many-locals, too-many-branches
+import html
 import os
 import shutil
 import urllib.parse
 import asyncio
+import sqlite3
 from datetime import datetime
 from contextlib import asynccontextmanager
 from typing import List, Optional, Any, Dict
@@ -32,7 +34,7 @@ from database import db, init_db, sync_db_with_files
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(_app: FastAPI):
     """
     Lifespan events for the FastAPI application.
     Handles startup database initialization and background sync task.
@@ -46,7 +48,7 @@ async def lifespan(app: FastAPI):
             await asyncio.sleep(300)  # 5 minutes
             try:
                 sync_db_with_files()
-            except Exception as e:
+            except (IOError, ValueError, RuntimeError, sqlite3.Error) as e:
                 logger.error("Background_sync error: %s", e)
 
     sync_task = asyncio.create_task(background_sync())
@@ -63,16 +65,13 @@ def format_notes(notes: str) -> str:
     """
     Format release notes with simple markdown-like syntax to HTML.
     """
-    import html
-
     h = html.escape(notes)
     lines = h.split("\n")
     result = []
     for line in lines:
         if line.startswith("## "):
-            result.append(
-                f'<h3 style="margin: 15px 0 10px 0; border-bottom: 1px solid #dddfe2;">{line[3:]}</h3>'
-            )
+            h3_style = "margin: 15px 0 10px 0; border-bottom: 1px solid #dddfe2;"
+            result.append(f'<h3 style="{h3_style}">{line[3:]}</h3>')
         elif line.startswith("### "):
             result.append(f'<h4 style="margin: 10px 0 5px 0;">{line[4:]}</h4>')
         elif line.startswith("- "):
@@ -320,7 +319,7 @@ async def admin_get(request: Request, admin: bool = Depends(is_admin)):
 
 @app.post("/admin/add-user")
 async def add_user(
-    request: Request,
+    _request: Request,
     username: str = Form(...),
     password: str = Form(...),
     permissions: List[str] = Form([]),
@@ -336,7 +335,8 @@ async def add_user(
     perm_str = ",".join(permissions)
     hashed_pw = hash_password(password)
     db.execute(
-        "INSERT OR IGNORE INTO users (username, password, permissions, apk_filter) VALUES (?, ?, ?, ?)",
+        "INSERT OR IGNORE INTO users (username, password, permissions, apk_filter) "
+        "VALUES (?, ?, ?, ?)",
         (username, hashed_pw, perm_str, apk_filter),
     )
     return RedirectResponse(url="/admin", status_code=303)
@@ -344,7 +344,7 @@ async def add_user(
 
 @app.post("/admin/delete-user")
 async def delete_user(
-    request: Request, username: str = Form(...), admin: bool = Depends(is_admin)
+    _request: Request, username: str = Form(...), admin: bool = Depends(is_admin)
 ):
     """
     Admin: Delete a user.
@@ -383,7 +383,7 @@ async def edit_user_get(
 
 @app.post("/admin/edit-user")
 async def edit_user_post(
-    request: Request,
+    _request: Request,
     username: str = Form(...),
     new_username: str = Form(...),
     password: Optional[str] = Form(None),
@@ -401,7 +401,8 @@ async def edit_user_post(
     if password and password.strip():
         hashed_pw = hash_password(password)
         db.execute(
-            "UPDATE users SET username = ?, password = ?, permissions = ?, apk_filter = ? WHERE username = ?",
+            "UPDATE users SET username = ?, password = ?, permissions = ?, "
+            "apk_filter = ? WHERE username = ?",
             (new_username, hashed_pw, perm_str, apk_filter, username),
         )
     else:
@@ -527,9 +528,9 @@ async def add_apk(
 
 @app.post("/api/delete-apk")
 async def delete_apk(
-    request: Request,
+    _request: Request,
     filename: str = Form(...),
-    user: Dict[str, Any] = Depends(require_permission("delete")),
+    _user: Dict[str, Any] = Depends(require_permission("delete")),
 ):
     """
     API endpoint to delete an APK and its associated metadata.
@@ -582,4 +583,4 @@ async def serve_file(
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=PORT)
+    uvicorn.run("app:app", host="0.0.0.0", port=PORT, reload=True)

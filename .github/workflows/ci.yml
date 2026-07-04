@@ -13,10 +13,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Python 3.12
+    - name: Set up Python 3.13
       uses: actions/setup-python@v5
       with:
-        python-version: '3.12'
+        python-version: '3.13'
 
     - name: Install dependencies
       run: |
@@ -31,10 +31,8 @@ jobs:
 
     - name: Lint with pylint
       run: |
-        # We allow the job to continue even if pylint fails for now,
-        # or we can set a threshold.
-        # Based on previous session, the score was 9.14.
-        pylint *.py tests/*.py --fail-under=8.0
+        # Maintain high code quality (currently at 10.00/10)
+        pylint *.py tests/*.py deployment/*.py --fail-under=9.5
 
     - name: Test with pytest
       run: |

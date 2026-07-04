@@ -30,8 +30,8 @@ def verify_password(password: str, hashed: str) -> bool:
         if len(pwd_bytes) > 72:
             pwd_bytes = pwd_bytes[:72]
         return bcrypt.checkpw(pwd_bytes, hashed.encode("utf-8"))
-    except Exception as e:
-        logger.debug(f"Password verification error: {e}")
+    except (ValueError, TypeError, AttributeError) as e:
+        logger.debug("Password verification error: %s", e)
         return False
 
 
