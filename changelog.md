@@ -1,3 +1,16 @@
+## [1.0.9] - 2026-07-04
+
+### Added
+- Comprehensive test suite in `tests/` covering core logic and API.
+- Dev dependencies in `requirements-dev.txt`.
+
+### Improved
+- Code quality and maintainability through modular refactoring.
+- Documentation with module and function-level docstrings.
+- Adherence to PEP 8 standards (Pylint score > 9.0).
+- Fixed environment-related setup issues for testing and linting.
+
+
 ## [1.0.8] - 2026-07-04
 
 ### Added
