@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ app_name }} Admin - Edit User</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; background: #f0f2f5; color: #1c1e21; line-height: 1.5; }
+        h1 { color: #1877f2; border-bottom: 2px solid #1877f2; padding-bottom: 10px; margin-bottom: 30px; font-weight: 800; }
+        .card { padding: 24px; border-radius: 16px; background: white; box-shadow: 0 1px 2px rgba(0,0,0,0.1); border: 1px solid #dddfe2; margin-bottom: 20px; }
+        .btn { padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 0.85em; font-weight: 600; transition: background 0.2s; border: none; display: inline-block; }
+        .btn-primary { background: #1877f2; color: white; }
+        .btn-primary:hover { background: #166fe5; }
+        .btn-secondary { background: #e4e6eb; color: #4b4f56; margin-left: 10px; }
+        .btn-secondary:hover { background: #d8dadf; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #4b4f56; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #dddfe2; border-radius: 6px; box-sizing: border-box; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .btn-back { color: #65676b; text-decoration: none; font-size: 0.85em; font-weight: 500; }
+        .btn-back:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="admin-header">
+        <h1>Edit User: {{ user.username }}</h1>
+        <a href="/admin" class="btn-back">Back to User Management</a>
+    </div>
+
+    <div class="card">
+        <form action="/admin/edit-user" method="POST">
+            <input type="hidden" name="username" value="{{ user.username }}">
+            <div class="form-group">
+                <label for="new_username">Username</label>
+                <input type="text" id="new_username" name="new_username" required value="{{ user.username }}">
+            </div>
+            <div class="form-group">
+                <label for="password">New Password (leave empty to keep current)</label>
+                <input type="password" id="password" name="password" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+                <label>Permissions</label>
+                <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 5px;">
+                    {% set perms = user.permissions.split(',') %}
+                    <label style="font-weight: normal;"><input type="checkbox" name="permissions" value="view" {% if 'view' in perms or 'admin' in perms %}checked{% endif %}> View</label>
+                    <label style="font-weight: normal;"><input type="checkbox" name="permissions" value="download" {% if 'download' in perms or 'admin' in perms %}checked{% endif %}> Download</label>
+                    <label style="font-weight: normal;"><input type="checkbox" name="permissions" value="upload" {% if 'upload' in perms or 'admin' in perms %}checked{% endif %}> Upload</label>
+                    <label style="font-weight: normal;"><input type="checkbox" name="permissions" value="delete" {% if 'delete' in perms or 'admin' in perms %}checked{% endif %}> Delete</label>
+                    <label style="font-weight: normal;"><input type="checkbox" name="permissions" value="admin" {% if 'admin' in perms %}checked{% endif %}> Admin</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="apk_filter">APK Filter (Optional)</label>
+                <input type="text" id="apk_filter" name="apk_filter" value="{{ user.apk_filter or '' }}" placeholder="e.g. ultrasonic, ultrasonic-debug">
+                <small style="color: #65676b; font-size: 0.8em;">User will only see/download APKs starting with these names. Leave empty for all.</small>
+            </div>
+            <div style="margin-top: 20px;">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a href="/admin" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

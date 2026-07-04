@@ -1,19 +1,16 @@
-# Build stage
-FROM golang:alpine AS builder
+FROM python:3.12-slim
 
 WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
 COPY . .
-RUN go build -o apk-hoster main.go
 
-# Final stage
-FROM alpine:latest
-
-WORKDIR /app
-COPY --from=builder /app/apk-hoster .
 # Create dist directory, will be populated via volume mount
 RUN mkdir -p dist
 
 EXPOSE 8275
-CMD ["./apk-hoster"]
+
+# Use uvicorn to run the FastAPI app
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8275"]
