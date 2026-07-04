@@ -9,7 +9,7 @@ A professional, self-hosted service for hosting and managing APK files. Featurin
 
 -   **Dynamic Web Interface**: Automatically generated index page with a modern, responsive design.
 -   **Tabbed Navigation**: Separate views for APK listings and Project Changelog.
--   **Automated Release Management**: Use the `./bup` tool for seamless version bumping, tagging, and deployment.
+-   **Automated Release Management**: Use the `./scripts/build_and_publish.sh` tool for seamless version bumping, tagging, and deployment.
 -   **Secure Upload API**: Integrated endpoint for programmatic uploads with password protection and IP whitelisting.
 -   **Release Notes Support**: Display rich HTML release notes extracted from companion `.txt` files or Markdown.
 -   **QR Code Integration**: Instantly download APKs to mobile devices by scanning generated QR codes.
@@ -31,7 +31,7 @@ A professional, self-hosted service for hosting and managing APK files. Featurin
 
 2.  **Deploy**:
     ```bash
-    ./bup patch  # Bumps version, builds image, and deploys
+    ./scripts/build_and_publish.sh patch  # Bumps version, builds image, and deploys
     ```
 
 ### Standalone Installation
