@@ -1,3 +1,10 @@
+## [1.0.4] - 2026-07-04
+
+### Added
+- Tabbed interface for APK list and Changelog
+- Moved changelog to a separate tab at the top of the page
+
+
 ## [1.0.3] - 2026-07-04
 
 ### Added

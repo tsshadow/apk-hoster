@@ -1,56 +1,109 @@
 # APK Hoster
 
-A simple Python-based service to host APK files with dynamic index generation and an upload API. This service is designed to be self-hosted, e.g., on a NAS or a private server.
+![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-## Features
-- Dynamic index page listing all APKs in the `dist` directory.
-- Release notes support (via accompanying `.txt` files).
-- Secure upload API (`/api/add-apk`).
-- Admin interface to delete APKs.
-- Search/filter functionality on the index page.
-- QR codes for easy mobile downloads.
-- File size information.
-- Background filesystem synchronization.
-- IP whitelisting and password protection for uploads.
-- Automatic APK mime-type handling.
+A professional, self-hosted service for hosting and managing APK files. Featuring a dynamic web interface, an automated release system, and a secure upload API.
 
-## Setup
+## 🚀 Features
+
+-   **Dynamic Web Interface**: Automatically generated index page with a modern, responsive design.
+-   **Tabbed Navigation**: Separate views for APK listings and Project Changelog.
+-   **Automated Release Management**: Use the `./bup` tool for seamless version bumping, tagging, and deployment.
+-   **Secure Upload API**: Integrated endpoint for programmatic uploads with password protection and IP whitelisting.
+-   **Release Notes Support**: Display rich HTML release notes extracted from companion `.txt` files or Markdown.
+-   **QR Code Integration**: Instantly download APKs to mobile devices by scanning generated QR codes.
+-   **Multi-Database Support**: Flexible storage options using either SQLite (local) or MySQL (remote/Docker).
+-   **Background Synchronization**: Automatically keeps the database in sync with the filesystem.
+-   **Admin Dashboard**: Manage users, permissions, and APKs through a secure web-based interface.
+-   **Granular Permissions**: Define view, download, upload, and delete permissions per user.
+-   **APK Filtering**: Restrict user access to specific APK name prefixes.
+
+## 🛠️ Quick Start
+
+### Using Docker (Recommended)
 
 1.  **Configure Environment**:
-    Copy `.env.example` to `.env` and fill in the values:
     ```bash
     cp .env.example .env
+    # Edit .env with your desired configurations
     ```
 
-2.  **Build and Run (Docker)**:
+2.  **Deploy**:
     ```bash
-    ./bup
+    ./bup patch  # Bumps version, builds image, and deploys
     ```
-    This will build the Docker image and deploy it using `docker-compose`.
 
-3.  **Standalone Build**:
+### Standalone Installation
+
+1.  **Install Dependencies**:
     ```bash
     pip install -r requirements.txt
+    ```
+
+2.  **Run the Application**:
+    ```bash
     python app.py
     ```
 
-## API
+## ⚙️ Configuration
 
-### `GET /api/version?apk=ultrasonic`
-Returns JSON with the latest version information.
+The application is configured via environment variables in the `.env` file:
 
-### `POST /api/add-apk`
-Upload a new APK.
-- **Fields**:
-  - `apk`: The APK file.
-  - `release_notes`: (Optional) Text for release notes.
-  - `password`: (Optional) Upload password.
-- **Headers**:
-  - `X-Upload-Password`: (Optional) Alternative to `password` field.
+| Variable | Default | Description |
+| :--- | :--- | :--- |
+| `APP_NAME` | `ultrasonic` | The display name of your application. |
+| `PORT` | `8275` | The port the service will listen on. |
+| `DIST_DIR` | `./dist` | Directory where APK files are stored. |
+| `ADMIN_PASS` | (empty) | Admin password for first-time setup. |
+| `ALLOWED_IPS` | (empty) | Comma-separated list of IPs allowed for uploads. |
+| `DB_TYPE` | `sqlite` | Database type: `sqlite` or `mysql`. |
 
-## Security
-- `ADMIN_PASS`: Used on first startup to create the `admin` user. Afterwards, the password is managed via the database.
-- `ALLOWED_IPS`: Comma-separated list of IPs allowed to upload.
-- `APP_NAME`: Name of the application displayed on the index page (default: `ultrasonic`).
-- `PORT`: Port to run the server on (default: `8275`).
-- `DIST_DIR`: Directory to serve APKs from (default: `./dist` or `/mnt/apks`).
+*For full configuration options, see `.env.example`.*
+
+## 📖 API Documentation
+
+### Get Latest Version
+`GET /api/version?apk=<name>`
+
+**Response**:
+```json
+{
+  "apk": "myapp",
+  "versionName": "1.0.3",
+  "versionCode": 3,
+  "buildDate": "2023-10-27T10:00:00",
+  "filename": "myapp-v1.0.3-3.apk",
+  "size": 15728640,
+  "url": "https://host.com/myapp-v1.0.3-3.apk",
+  "releaseNotes": "Bug fixes and improvements"
+}
+```
+
+### Upload APK
+`POST /api/add-apk`
+
+**Fields**:
+- `apk`: The `.apk` file (Multipart).
+- `release_notes`: (Optional) Plain text or basic Markdown.
+- `password`: (Optional) Authorization password.
+
+**Headers**:
+- `X-Upload-Password`: Alternative to the `password` field.
+
+## 🧪 Development and Quality
+
+We strive for high code quality and maintainability.
+
+### Running Tests
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
+
+### Code Style
+The project follows PEP 8 standards and uses `pylint` for static analysis. Detailed docstrings and type hints are required for all new contributions.
+
+## 📄 License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.

@@ -1,7 +1,12 @@
 .env
-apk-hoster
 dist/
 *.db
 cookies.txt
 __pycache__/
 .idea/
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
