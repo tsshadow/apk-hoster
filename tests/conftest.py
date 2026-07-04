@@ -32,6 +32,12 @@ def setup_test_db():
     # Initialize the test database
     init_db()
 
+    # Ensure the database is not empty to avoid "anonymous admin" behavior
+    db.execute(
+        "INSERT OR IGNORE INTO users (username, password, permissions) VALUES (?, ?, ?)",
+        ("placeholder", hash_password("placeholder"), "none"),
+    )
+
     yield
 
     # Cleanup
