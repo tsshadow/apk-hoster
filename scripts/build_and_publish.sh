@@ -21,7 +21,7 @@ echo "--- Starting Build and Publish ---"
 if [ "$1" == "major" ] || [ "$1" == "minor" ] || [ "$1" == "patch" ]; then
     source ./bump_version.sh "$1"
     VERSION_NAME="v$NEW_VERSION"
-    
+
     cd ..
     git add .
     git commit -m "chore: release $VERSION_NAME"

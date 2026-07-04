@@ -26,8 +26,8 @@ jobs:
 
     - name: Lint with pylint
       run: |
-        # We allow the job to continue even if pylint fails for now, 
-        # or we can set a threshold. 
+        # We allow the job to continue even if pylint fails for now,
+        # or we can set a threshold.
         # Based on previous session, the score was 9.14.
         pylint *.py tests/*.py --fail-under=8.0
 

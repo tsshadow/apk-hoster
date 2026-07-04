@@ -10,7 +10,7 @@ run_ssh() {
     local user="$2"
     local pass="$3"
     local cmd="$4"
-    
+
     if [ -z "$host" ] || [ -z "$user" ]; then
         return 1
     fi
@@ -111,7 +111,7 @@ DEPLOY_CMD="
     set -e
     FINAL_COMPOSE_FILE=\"/tmp/docker-compose.$STACK_NAME.yml\"
     echo \"\$BASE64_COMPOSE\" | base64 -d > \"\$FINAL_COMPOSE_FILE\"
-    
+
     # Handle environment variables
     ENV_ARG=\"\"
     if [ -n \"\$BASE64_ENV\" ]; then
@@ -132,10 +132,10 @@ DEPLOY_CMD="
         echo \"Error: Neither docker compose nor docker-compose found on remote host.\"
         exit 1
     fi
-    
+
     echo \"Updating stack '$STACK_NAME' via: \$DOCKER_CMD\"
     \$DOCKER_CMD pull
-    
+
     # Try to remove conflicting container name if it exists and is not part of this project
     EXISTING_ID=\$(docker ps -aq --filter \"name=^/${SERVICE_NAME}\$\" | head -n 1)
     if [ -n \"\$EXISTING_ID\" ]; then

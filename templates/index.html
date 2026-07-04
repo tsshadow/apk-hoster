@@ -44,11 +44,11 @@
             {% if authenticated %}
                 <span style="margin-right: 15px; color: #65676b; font-size: 0.85em;">Logged in as <strong>{{ username }}</strong></span>
             {% endif %}
-            
+
             {% if is_admin %}
                 <a href="/admin" class="btn-login" style="margin-right: 15px;">Admin View</a>
             {% endif %}
-            
+
             {% if authenticated %}
                 <a href="/logout" class="btn-login">Logout</a>
             {% else %}
@@ -126,7 +126,7 @@
         </div>
     </div>
     {% endif %}
-    
+
     <script>
         function filterList() {
             var input = document.getElementById('search');
@@ -151,7 +151,7 @@
         function showTab(tabId, btn) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
+
             document.getElementById(tabId).classList.add('active');
             btn.classList.add('active');
         }

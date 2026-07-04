@@ -19,9 +19,9 @@ CURRENT_VERSION=$(cat "$VERSION_FILE")
 increment_version() {
     local version=$1
     local type=$2
-    
+
     IFS='.' read -r major minor patch <<< "$version"
-    
+
     case "$type" in
         major)
             major=$((major + 1))
@@ -40,7 +40,7 @@ increment_version() {
             exit 1
             ;;
     esac
-    
+
     echo "$major.$minor.$patch"
 }
 
