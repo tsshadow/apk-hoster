@@ -131,9 +131,18 @@ def get_current_user(
     request: Request, session: Optional[str] = Cookie(None)
 ) -> Optional[Dict[str, Any]]:
     """
-    Authenticate the current user via header or session cookie.
+    Authenticate the current user via header, session cookie or query parameters.
     """
     x_password = request.headers.get("X-Upload-Password")
+
+    # Check query parameters for guest login
+    u = request.query_params.get("u")
+    p = request.query_params.get("p")
+
+    if u and p:
+        user = db.fetchone("SELECT * FROM users WHERE username = ?", (u,))
+        if user and verify_password(p, user["password"]):
+            return user
 
     if x_password:
         users = db.fetchall("SELECT * FROM users")

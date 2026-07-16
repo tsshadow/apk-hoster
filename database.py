@@ -316,6 +316,13 @@ def init_db():
             ("admin", hashed_pw, "admin"),
         )
 
+    # Add guest user for simple downloads
+    guest_pw = hash_password("guest")
+    db.execute(
+        "INSERT OR IGNORE INTO users (username, password, permissions) VALUES (?, ?, ?)",
+        ("guest", guest_pw, "view,download"),
+    )
+
 
 def sync_db_with_files():
     """
