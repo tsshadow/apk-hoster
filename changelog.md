@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+## [1.1.0] - 2026-08-21
+
 ### Added
 - Guest user authentication via query parameters (`u=guest`, `p=guest`).
 - Automatic creation of `guest` user on database initialization.
