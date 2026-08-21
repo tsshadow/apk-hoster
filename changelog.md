@@ -3,6 +3,26 @@
 ### Added
 - Guest user authentication via query parameters (`u=guest`, `p=guest`).
 - Automatic creation of `guest` user on database initialization.
+- `APK_ALIASES` (`old=new,old2=new2`) makes a renamed APK series keep answering under its old
+  name. A series is identified only by the filename prefix of its uploads, so renaming one
+  strands every copy already installed: those keep asking `/api/version` for the old name and
+  are told they are up to date. An alias bridges that until the last install has been replaced
+  by a build that asks for the new name. Aliases apply to a user's `apk_filter` as well, so a
+  rename does not silently revoke access to the series.
+
+### Changed
+- The service no longer carries the name of the one app it happened to host. `APP_NAME` now
+  defaults to `APK Hoster` instead of `ultrasonic` (which is what the login page showed on a
+  deployment that never set it), the seeded non-admin account is configured through
+  `DEFAULT_USER` / `DEFAULT_USER_PASSWORD` instead of the hardcoded `ultrasonic` user and its
+  `ULTRASONIC_PASSWORD` variable, the protected-user list and the example `apk_filter`
+  placeholders follow from those, and `/api/version` no longer defaults its `apk` parameter to
+  a specific app - without one it returns the newest upload of any series.
+
+### Migration
+- Rename `ULTRASONIC_PASSWORD` to `DEFAULT_USER_PASSWORD` in the deployment `.env`, and set
+  `DEFAULT_USER` to the account name that deployment already uses. Existing user rows are left
+  untouched; only the seeding/permission refresh follows the new variables.
 
 ## [1.0.9] - 2026-07-04
 

@@ -57,11 +57,14 @@ The application is configured via environment variables in the `.env` file:
 
 | Variable | Default | Description |
 | :--- | :--- | :--- |
-| `APP_NAME` | `ultrasonic` | The display name of your application. |
+| `APP_NAME` | `APK Hoster` | The display name shown on the login and index pages. |
 | `PORT` | `8275` | The port the service will listen on. |
 | `DIST_DIR` | `./dist` | Directory where APK files are stored. |
 | `ADMIN_PASS` | (empty) | Admin password for first-time setup. |
 | `ALLOWED_IPS` | (empty) | Comma-separated list of IPs allowed for uploads. |
+| `DEFAULT_USER` | `user` | Name of the non-admin account seeded on startup. |
+| `DEFAULT_USER_PASSWORD` | (empty) | Password for that account; empty means it is not created. |
+| `APK_ALIASES` | (empty) | `old=new` pairs so a renamed APK series keeps answering under its old name. |
 | `DB_TYPE` | `sqlite` | Database type: `sqlite` or `mysql`. |
 
 *For full configuration options, see `.env.example`.*

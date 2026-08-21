@@ -19,7 +19,8 @@ from config import (
     DIST_DIR,
     APK_REGEX,
     ADMIN_PASSWORD,
-    ULTRASONIC_PASSWORD,
+    DEFAULT_USER,
+    DEFAULT_USER_PASSWORD,
     logger,
 )
 from utils import hash_password
@@ -299,14 +300,15 @@ def init_db():
         conn.commit()
         conn.close()
 
-    if ULTRASONIC_PASSWORD:
-        hashed_pw = hash_password(ULTRASONIC_PASSWORD)
+    if DEFAULT_USER_PASSWORD:
+        hashed_pw = hash_password(DEFAULT_USER_PASSWORD)
         db.execute(
             "INSERT OR IGNORE INTO users (username, password, permissions) VALUES (?, ?, ?)",
-            ("ultrasonic", hashed_pw, "view,download,upload"),
+            (DEFAULT_USER, hashed_pw, "view,download,upload"),
         )
         db.execute(
-            "UPDATE users SET permissions = 'view,download,upload' WHERE username = 'ultrasonic'"
+            "UPDATE users SET permissions = 'view,download,upload' WHERE username = ?",
+            (DEFAULT_USER,),
         )
 
     if ADMIN_PASSWORD:

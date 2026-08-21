@@ -28,7 +28,15 @@ from fastapi import (
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 
-from config import APP_NAME, PORT, ALLOWED_IPS, DIST_DIR, logger
+from config import (
+    APP_NAME,
+    PORT,
+    ALLOWED_IPS,
+    DIST_DIR,
+    DEFAULT_USER,
+    APK_ALIASES,
+    logger,
+)
 from utils import hash_password, verify_password
 from database import db, init_db, sync_db_with_files
 
@@ -193,6 +201,10 @@ def check_permission(
         apk_filter = user.get("apk_filter")
         if apk_filter:
             filters = [f.strip() for f in apk_filter.split(",")]
+            # An alias declares two names for one series (see APK_ALIASES). A
+            # filter written for the old name has to keep matching the new one,
+            # otherwise renaming a series silently revokes access to it.
+            filters += [APK_ALIASES[f] for f in filters if f in APK_ALIASES]
             if not any(apk_name.startswith(f) for f in filters):
                 return False
 
@@ -361,7 +373,7 @@ async def delete_user(
     if not admin:
         raise HTTPException(status_code=403, detail="Forbidden")
 
-    if username in ["admin", "ultrasonic"]:
+    if username in ["admin", DEFAULT_USER]:
         logger.warning("Attempt to delete protected user: %s", username)
         return RedirectResponse(url="/admin", status_code=303)
 
@@ -436,21 +448,28 @@ async def logout():
 @app.get("/get")
 async def get_version(
     request: Request,
-    apk: str = "ultrasonic",
+    apk: Optional[str] = None,
     user: Dict[str, Any] = Depends(require_permission("view")),
 ):
     """
     API endpoint to get the latest version info for an APK.
+
+    Without an `apk` parameter the newest upload of any series is returned.
     """
-    if not check_permission(user, "view", apk):
+    if apk and not check_permission(user, "view", apk):
         raise HTTPException(
             status_code=403, detail=f"Forbidden: No permission for APK {apk}"
         )
 
-    row = db.fetchone(
-        "SELECT * FROM apks WHERE apk_name = ? ORDER BY version_code DESC, build_date DESC LIMIT 1",
-        (apk,),
-    )
+    row = None
+    if apk:
+        # A renamed series keeps answering under its old name (see APK_ALIASES).
+        series = APK_ALIASES.get(apk, apk)
+        row = db.fetchone(
+            "SELECT * FROM apks WHERE apk_name = ? "
+            "ORDER BY version_code DESC, build_date DESC LIMIT 1",
+            (series,),
+        )
     if not row:
         row = db.fetchone(
             "SELECT * FROM apks ORDER BY version_code DESC, build_date DESC LIMIT 1"

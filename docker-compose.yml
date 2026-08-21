@@ -9,8 +9,10 @@ services:
     environment:
       - ADMIN_PASS=${ADMIN_PASS}
       - ALLOWED_IPS=${ALLOWED_IPS}
-      - APP_NAME=${APP_NAME:-ultrasonic}
-      - ULTRASONIC_PASSWORD=${ULTRASONIC_PASSWORD}
+      - APP_NAME=${APP_NAME:-APK Hoster}
+      - DEFAULT_USER=${DEFAULT_USER:-user}
+      - DEFAULT_USER_PASSWORD=${DEFAULT_USER_PASSWORD}
+      - APK_ALIASES=${APK_ALIASES}
       - DB_TYPE=${DB_TYPE:-sqlite}
       - MYSQL_HOST=${MYSQL_HOST:-db}
       - MYSQL_PORT=${MYSQL_PORT:-3306}

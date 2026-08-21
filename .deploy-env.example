@@ -11,7 +11,7 @@ REMOTE_USER=root
 REMOTE_PASS=
 
 # Path on the remote host where APKs are stored
-REMOTE_DIST_PATH=/mnt/teun/ultrasonic-builds
+REMOTE_DIST_PATH=/mnt/teun/apk-builds
 
 # Target name used in status messages
 DEPLOY_TARGET_NAME=APK Hoster

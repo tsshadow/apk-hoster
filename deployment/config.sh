@@ -35,7 +35,7 @@ load_env "$ROOT_DIR/.deploy-env"
 export APP_NAME="${APP_NAME:-apk-hoster}"
 export DOCKER_IMAGE="${DOCKER_IMAGE:-tsshadow/apk-hoster}"
 export SERVICE_NAME="${SERVICE_NAME:-apk-hoster}"
-export REMOTE_DIST_PATH="${REMOTE_DIST_PATH:-/mnt/teun/ultrasonic-builds}"
+export REMOTE_DIST_PATH="${REMOTE_DIST_PATH:-/mnt/teun/apk-builds}"
 export DEPLOY_TARGET_NAME="${DEPLOY_TARGET_NAME:-APK Hoster}"
 
 # 4. Version Info
