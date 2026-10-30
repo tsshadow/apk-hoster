@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-30
+
 ### Added
 - A push through ntfy when a new APK arrives, by upload or as a file in the dist folder. Set
   `NTFY_URL` to turn it on; the topic is `NTFY_TOPIC` (default `apk-hoster`). A first start on an
