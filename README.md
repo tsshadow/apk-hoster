@@ -65,6 +65,9 @@ The application is configured via environment variables in the `.env` file:
 | `DEFAULT_USER` | `user` | Name of the non-admin account seeded on startup. |
 | `DEFAULT_USER_PASSWORD` | (empty) | Password for that account; empty means it is not created. |
 | `APK_ALIASES` | (empty) | `old=new` pairs so a renamed APK series keeps answering under its old name. |
+| `NTFY_URL` | (empty) | Base URL of an ntfy server. Set, every new APK sends a push; empty, no push. |
+| `NTFY_TOPIC` | `apk-hoster` | ntfy topic for that push. |
+| `NTFY_TOKEN` | (empty) | Access token, for a server that requires one. |
 | `DB_TYPE` | `sqlite` | Database type: `sqlite` or `mysql`. |
 
 *For full configuration options, see `.env.example`.*

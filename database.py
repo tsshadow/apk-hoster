@@ -24,6 +24,7 @@ from config import (
     logger,
 )
 from utils import hash_password
+from notify import notify_new_apk
 
 try:
     import mysql.connector
@@ -331,6 +332,10 @@ def sync_db_with_files():
     Synchronize the database with files in the distribution directory.
     """
     files = os.listdir(DIST_DIR)
+    # A database without any APK is a first start: everything on disk is new to
+    # it, and none of it is news to a person.
+    count = db.fetchone("SELECT COUNT(*) as count FROM apks")
+    announce = bool(count and count["count"])
     for filename in files:
         if not filename.endswith(".apk"):
             continue
@@ -396,3 +401,5 @@ def sync_db_with_files():
             ),
         )
         logger.info("Synced %s to DB", filename)
+        if announce:
+            notify_new_apk(apk_name, version_name, version_code, filename)

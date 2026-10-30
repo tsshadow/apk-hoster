@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+### Added
+- A push through ntfy when a new APK arrives, by upload or as a file in the dist folder. Set
+  `NTFY_URL` to turn it on; the topic is `NTFY_TOPIC` (default `apk-hoster`). A first start on an
+  empty database sends nothing.
+
 ## [1.1.0] - 2026-08-21
 
 ### Added

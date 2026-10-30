@@ -13,6 +13,9 @@ services:
       - DEFAULT_USER=${DEFAULT_USER:-user}
       - DEFAULT_USER_PASSWORD=${DEFAULT_USER_PASSWORD}
       - APK_ALIASES=${APK_ALIASES}
+      - NTFY_URL=${NTFY_URL:-}
+      - NTFY_TOPIC=${NTFY_TOPIC:-apk-hoster}
+      - NTFY_TOKEN=${NTFY_TOKEN:-}
       - DB_TYPE=${DB_TYPE:-sqlite}
       - MYSQL_HOST=${MYSQL_HOST:-db}
       - MYSQL_PORT=${MYSQL_PORT:-3306}

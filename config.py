@@ -30,6 +30,11 @@ DEFAULT_USER = os.getenv("DEFAULT_USER", "user")
 DEFAULT_USER_PASSWORD = os.getenv("DEFAULT_USER_PASSWORD", "")
 ALLOWED_IPS = os.getenv("ALLOWED_IPS", "")
 
+# Push notification for a new APK (ntfy). Empty NTFY_URL turns it off.
+NTFY_URL = os.getenv("NTFY_URL", "")
+NTFY_TOPIC = os.getenv("NTFY_TOPIC", "apk-hoster")
+NTFY_TOKEN = os.getenv("NTFY_TOKEN", "")
+
 # Database Config
 DB_TYPE = os.getenv("DB_TYPE", "sqlite").lower()
 MYSQL_HOST = os.getenv("MYSQL_HOST", "db")
