@@ -2,7 +2,7 @@
 # deployment/backup.sh - Copy what a rebuild needs and git does not hold.
 #
 # Usage: ./deployment/backup.sh [TARGET_DIR]
-#   TARGET_DIR  default: $BACKUP_DIR from .env, else /mnt/Synology/apk-hoster
+#   TARGET_DIR  default: $BACKUP_DIR from .env, else /mnt/synology/backup/apk-hoster
 #
 # Writes TARGET_DIR/<timestamp>/ with:
 #   apk-hoster.bundle  every branch and tag (git clone apk-hoster.bundle restores it)
@@ -20,7 +20,7 @@ env_value() {
 }
 
 TARGET_DIR="${1:-${BACKUP_DIR:-$(env_value BACKUP_DIR)}}"
-TARGET_DIR="${TARGET_DIR:-/mnt/Synology/apk-hoster}"
+TARGET_DIR="${TARGET_DIR:-/mnt/synology/backup/apk-hoster}"
 BACKUP_DB="${BACKUP_DB:-$(env_value BACKUP_DB)}"
 KEEP="${BACKUP_KEEP:-10}"
 
