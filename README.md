@@ -68,6 +68,8 @@ The application is configured via environment variables in the `.env` file:
 | `NTFY_URL` | (empty) | Base URL of an ntfy server. Set, every new APK sends a push; empty, no push. |
 | `NTFY_TOPIC` | `apk-hoster` | ntfy topic for that push. |
 | `NTFY_TOKEN` | (empty) | Access token, for a server that requires one. |
+| `BACKUP_DIR` | (empty) | Where `deployment/backup.sh` writes; empty means `/mnt/Synology/apk-hoster`. |
+| `BACKUP_DB` | (empty) | Path to a readable copy of `apk-hoster.db` for that backup. |
 | `DB_TYPE` | `sqlite` | Database type: `sqlite` or `mysql`. |
 
 *For full configuration options, see `.env.example`.*

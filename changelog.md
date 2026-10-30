@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+### Added
+- `deployment/backup.sh` copies a git bundle of every branch and tag, the local `.env` and,
+  with `BACKUP_DB`, the database into a timestamped folder, and keeps the newest ten.
+
 ## [1.2.0] - 2026-10-30
 
 ### Added
